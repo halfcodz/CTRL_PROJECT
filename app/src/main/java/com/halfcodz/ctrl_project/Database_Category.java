@@ -1,2 +1,4 @@
-package com.halfcodz.ctrl_project;public class Database_Category {
+package com.halfcodz.ctrl_project;
+
+public class Database_Category {
 }
