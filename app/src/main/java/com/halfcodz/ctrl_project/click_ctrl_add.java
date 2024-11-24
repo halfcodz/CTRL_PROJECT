@@ -1,0 +1,41 @@
+package com.halfcodz.ctrl_project;
+
+import android.content.Intent;
+import android.media.MediaRouter;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toolbar;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class click_ctrl_add extends AppCompatActivity {
+
+    private Button addCategory_Next; //Next 버튼
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_click_ctrl_add);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        addCategory_Next = findViewById(R.id.back);
+        addCategory_Next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(click_ctrl_add.this , ctrl_detail.class);
+                startActivity(i);
+            }
+        });
+    }
+}
