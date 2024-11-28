@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="66dp"
+            android:layout_height="43dp"
+            android:text="&lt;-"
+            android:layout_gravity="start"
+            android:layout_marginRight="40dp"/>
+
+        <TextView
+            android:id="@+id/tvDetailTitle"
+            android:layout_width="193dp"
+            android:layout_height="43dp"
+            android:gravity="center"
+            android:text="성공 List"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:padding="10dp"
+            android:background="#6C6C6C" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="20dp" >
+
+        <!-- (1) 선택한 성공 기록 제목 -->
+        <TextView
+            android:id="@+id/tvSuccessItemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:padding="8dp"
+            android:background="#EEEEEE"
+            android:layout_marginBottom="16dp" />
+
+        <!-- (2) 카테고리 제목 텍스트 -->
+        <TextView
+            android:id="@+id/tvCategoryTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="카테고리: 운동"
+            android:textSize="16sp"
+            android:padding="8dp" />
+
+        <!-- (3) 삭제 버튼 -->
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="삭제"
+            android:layout_marginTop="16dp" />
+
+        <!-- (4) 세부 일정 내용 -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:id="@+id/tvDetailContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp" />
+        </ScrollView>
+
+    </LinearLayout>
+</LinearLayout>

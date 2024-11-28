@@ -21,6 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SuccessList" android:label="SuccessList" />
+        <activity android:name=".FailureList" android:label="FailureList" />
+        <activity android:name=".SuccessDetail" android:label="SuccessDetail" />
     </application>
 
 </manifest>
