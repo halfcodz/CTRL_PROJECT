@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/img_wave"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="일정 추가"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:fontFamily="@font/rixyeoljeongdoregular"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/todoadd_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/edit_text"
+        android:hint="일정 제목을 입력하세요"
+        android:padding="8dp"
+        android:layout_marginTop="15dp"
+        android:textColor="#7A7070"
+        android:privateImeOptions="defaultInputmode=korean"
+        android:fontFamily="@font/rixyeoljeongdoregular"/>
+
+    <TextView
+        android:id="@+id/label_start_end_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="시작 날짜 &amp; 종료 날짜 입력"
+        android:textSize="16sp"
+        android:fontFamily="@font/rixyeoljeongdoregular"
+        android:layout_marginTop="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <android.widget.Button
+            android:id="@+id/startDateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/white"
+            android:gravity="left"
+            android:padding="8dp"
+            android:text="시작 날짜"
+            android:textColor="#7A7070"
+            android:textSize="18sp"
+            android:fontFamily="@font/rixyeoljeongdoregular"/>
+
+        <android.widget.Button
+            android:id="@+id/SnoneText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="end"
+            android:padding="8dp"
+            android:text="없음"
+            android:textColor="#7A7070"
+            android:textSize="18sp"
+            android:fontFamily="@font/rixyeoljeongdoregular"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <android.widget.Button
+            android:id="@+id/endDateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/white"
+            android:gravity="left"
+            android:padding="8dp"
+            android:textColor="#7A7070"
+            android:text="종료 날짜"
+            android:textSize="18sp"
+            android:fontFamily="@font/rixyeoljeongdoregular"/>
+
+        <android.widget.Button
+            android:id="@+id/EnoneText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="end"
+            android:padding="8dp"
+            android:text="없음"
+            android:textColor="#7A7070"
+            android:textSize="18sp"
+            android:fontFamily="@font/rixyeoljeongdoregular"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <android.widget.Button
+            android:id="@+id/timeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@color/white"
+            android:gravity="left"
+            android:padding="8dp"
+            android:text="시간"
+            android:textColor="#7A7070"
+            android:textSize="18sp"
+            android:fontFamily="@font/rixyeoljeongdoregular"/>
+
+        <android.widget.Button
+            android:id="@+id/TnoneText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="end"
+            android:padding="8dp"
+            android:text="없음"
+            android:textColor="#7A7070"
+            android:textSize="18sp"
+            android:fontFamily="@font/rixyeoljeongdoregular"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/choice_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="카테고리를 선택하세요"
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/rixyeoljeongdoregular"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_category"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/white"
+        android:scrollbarFadeDuration="0"
+        android:scrollbarSize="5dp"
+        android:padding="8dp"
+        android:scrollbarThumbVertical="@android:color/darker_gray"
+        android:scrollbars="vertical"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:background="@color/white">
+
+        <Button
+            android:id="@+id/completion_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="완료"
+            android:background="@drawable/round_button"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+</LinearLayout>

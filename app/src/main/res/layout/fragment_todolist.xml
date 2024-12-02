@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@color/white">
+
+        <TextView
+            android:background="@drawable/img_wave"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="[ CTRL ]"
+            android:id="@+id/schedule_Main"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:fontFamily="@font/rixyeoljeongdoregular"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_list"
+        android:layout_width="match_parent"
+        android:layout_height="457dp"
+        android:layout_marginTop="15dp"
+        android:scrollbarFadeDuration="0"
+        android:scrollbarSize="5dp"
+        android:padding="8dp"
+        android:scrollbarThumbVertical="@android:color/darker_gray"
+        android:scrollbars="vertical"
+        android:background="@color/white">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btn_todo_add"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/round_button"
+            android:fontFamily="@font/payboocotfextrabold"
+            android:text="+"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="15dp"/>
+    </LinearLayout>
+
+</LinearLayout>
