@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.halfcodz.ctrl_project"
+    namespace = "com.inhatc.real_project"
     compileSdk = 34
 
     defaultConfig {
@@ -29,16 +29,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
-    viewBinding {
-        enable = true
-    }
-
 }
 
 dependencies {
 
-    implementation ("androidx.room:room-runtime:2.6.1")
+    implementation ("androidx.recyclerview:recyclerview:1.3.2")
+
+    implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
 
     implementation("androidx.appcompat:appcompat:1.7.0")
@@ -47,5 +44,4 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
-
 }

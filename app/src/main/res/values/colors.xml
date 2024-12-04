@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- 수정: 버튼 활성/비활성 색상 추가 -->
+    <color name="button_active">#FF9800</color> <!-- 활성화된 버튼 -->
+    <color name="button_inactive">#BDBDBD</color> <!-- 비활성화된 버튼 -->
+
 </resources>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#CCCCFF"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/schedule_Main"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:fontFamily="@font/rixyeoljeongdoregular"
+            android:gravity="center"
+            android:text="[ 통계 ]"
+            android:textColor="@color/white"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="8dp">
+
+        <Button
+            android:id="@+id/success_btn"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/round_button"
+            android:drawableLeft="@drawable/success"
+            android:paddingLeft="35dp"
+            android:drawablePadding="25dp"
+            android:text="성공"
+            android:gravity=""
+            android:textSize="40dp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/rixyeoljeongdoregular"/>
+
+        <Button
+            android:id="@+id/fail_btn"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/round_button"
+            android:drawableLeft="@drawable/fail"
+            android:paddingLeft="35dp"
+            android:drawablePadding="25dp"
+            android:text="실패"
+            android:gravity=""
+            android:textSize="40dp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/rixyeoljeongdoregular"/>
+
+        <Button
+            android:id="@+id/ctrl_btn"
+            android:layout_width="300dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/round_button"
+            android:drawableLeft="@drawable/ctrl"
+            android:paddingLeft="35dp"
+            android:drawablePadding="25dp"
+            android:text="통제"
+            android:gravity=""
+            android:textSize="40dp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/rixyeoljeongdoregular"/>
+    </LinearLayout>
+
+</LinearLayout>
