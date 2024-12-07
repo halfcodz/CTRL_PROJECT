@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.inhatc.real_project.R;
+import com.halfcodz.ctrl_project.R;
 
 public class DetailTodolist extends AppCompatActivity {
 

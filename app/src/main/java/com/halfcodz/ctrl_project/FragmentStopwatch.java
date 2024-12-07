@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.halfcodz.ctrl_project.adpater.FocusAdapter;
 import com.halfcodz.ctrl_project.data.AppDatabase;
 import com.halfcodz.ctrl_project.data.Focus;
-import com.inhatc.real_project.R;
 
 import java.util.ArrayList;
 import java.util.List;

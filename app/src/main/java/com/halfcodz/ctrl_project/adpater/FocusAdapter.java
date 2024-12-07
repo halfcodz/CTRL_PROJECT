@@ -1,5 +1,6 @@
 package com.halfcodz.ctrl_project.adpater;
 
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +12,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.halfcodz.ctrl_project.R;
 import com.halfcodz.ctrl_project.data.AppDatabase;
 import com.halfcodz.ctrl_project.data.Focus;
 import com.halfcodz.ctrl_project.data.FocusDao;
-import com.inhatc.real_project.R;
+
 import java.util.Collections;
 import java.util.List;
 

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.inhatc.real_project.R;
+import com.halfcodz.ctrl_project.R;
 
 import java.util.List;
 
@@ -46,9 +46,12 @@ public class TodoADD_Adapter extends RecyclerView.Adapter<TodoADD_Adapter.ViewHo
         holder.radioButton.setChecked(position == selectedPosition);
 
         holder.radioButton.setOnClickListener(v -> {
-            selectedPosition = position;
-            notifyDataSetChanged();
-            onCategorySelectedListener.onCategorySelected(categoryName); // 카테고리 이름 전달
+            int currentPosition = holder.getAdapterPosition();
+            if (currentPosition != RecyclerView.NO_POSITION) {
+                selectedPosition = currentPosition;
+                notifyDataSetChanged();
+                onCategorySelectedListener.onCategorySelected(categoryNames.get(currentPosition)); // 선택된 카테고리 이름 전달
+            }
         });
     }
 

@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.inhatc.real_project"
+    namespace = "com.halfcodz.ctrl_project"
     compileSdk = 34
 
     defaultConfig {
@@ -14,6 +14,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        // View Binding 활성화
+        viewBinding = true
     }
 
     buildTypes {

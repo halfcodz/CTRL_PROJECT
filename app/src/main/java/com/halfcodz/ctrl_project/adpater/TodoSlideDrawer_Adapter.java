@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.halfcodz.ctrl_project.R;
 import com.halfcodz.ctrl_project.data.Control;
-import com.inhatc.real_project.R;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class TodoSlideDrawer_Adapter extends RecyclerView.Adapter<TodoSlideDrawe
         if (controlList == null || controlList.isEmpty()) {
             holder.controlItemName.setText("통제 항목이 없습니다.");
         } else {
-            holder.controlItemName.setText(controlList.get(position).getControl_Item());
+            holder.controlItemName.setText(controlList.get(position).getControlItem());
         }
     }
 

@@ -9,8 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.halfcodz.ctrl_project.R;
 import com.halfcodz.ctrl_project.data.Control;
-import com.inhatc.real_project.R;
 
 import java.util.List;
 
@@ -38,7 +38,7 @@ public class CategoryDetail_Adapter extends RecyclerView.Adapter<CategoryDetail_
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Control todo = todoList.get(position);
-        holder.todoNameTextView.setText(todo.getControl_Item());
+        holder.todoNameTextView.setText(todo.getControlItem()); // 수정된 부분
         holder.deleteButton.setOnClickListener(v -> deleteListener.onDelete(position));
     }
 

@@ -6,37 +6,48 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "controls")
 public class Control {
-    @PrimaryKey(autoGenerate = true)
-    private int id;     // 기본 key
-    @ColumnInfo
-    private int categoryId; // 카테고리 ID (외래 키)
-    @ColumnInfo
-    private String Category_Name;    // 카테고리 이름
-    @ColumnInfo
-    private String Control_Item;     // 통제 항목 이름
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    private int id;
+
+    @ColumnInfo(name = "category_id")
+    private int categoryId;
+
+    @ColumnInfo(name = "category_name")
+    private String categoryName;
+
+    @ColumnInfo(name = "control_item")
+    private String controlItem;
+
+    @ColumnInfo(name = "is_checked")
+    private boolean isChecked;
+
+    @ColumnInfo(name = "new_column")
+    private String newColumn;
+
+    // 기본 생성자
+    public Control() {
+    }
+
+    // categoryName과 controlItem을 설정하는 생성자
+    public Control(String categoryName, String controlItem) {
+        this.categoryName = categoryName;
+        this.controlItem = controlItem;
+    }
+
+    // controlItem만 설정하는 생성자
+    public Control(String controlItem) {
+        this.controlItem = controlItem;
+    }
+
+    // Getter 및 Setter 메서드
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getCategory_Name() {
-        return Category_Name;
-    }
-
-    public void setCategory_Name(String category_Name) {
-        Category_Name = category_Name;
-    }
-
-    public String getControl_Item() {
-        return Control_Item;
-    }
-
-    public void setControl_Item(String control_Item) {
-        Control_Item = control_Item;
     }
 
     public int getCategoryId() {
@@ -46,7 +57,22 @@ public class Control {
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
-    private boolean isChecked;  // 체크박스 상태
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getControlItem() {
+        return controlItem;
+    }
+
+    public void setControlItem(String controlItem) {
+        this.controlItem = controlItem;
+    }
 
     public boolean isChecked() {
         return isChecked;
@@ -56,4 +82,11 @@ public class Control {
         isChecked = checked;
     }
 
+    public String getNewColumn() {
+        return newColumn;
+    }
+
+    public void setNewColumn(String newColumn) {
+        this.newColumn = newColumn;
+    }
 }

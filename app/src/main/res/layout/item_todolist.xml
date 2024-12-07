@@ -88,7 +88,7 @@
 
     </LinearLayout>
 
-        <Button
+            <Button
             android:id="@+id/btn_record"
             android:layout_width="25dp"
             android:layout_height="27dp"

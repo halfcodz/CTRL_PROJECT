@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.halfcodz.ctrl_project.data.AppDatabase;
 import com.halfcodz.ctrl_project.data.Focus;
-import com.inhatc.real_project.R;
 
 import java.util.Timer;
 import java.util.TimerTask;
