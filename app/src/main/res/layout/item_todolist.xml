@@ -25,8 +25,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingTop="10dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/start_text"
@@ -73,32 +77,26 @@
             android:text="일정 끝"
             android:textSize="13dp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/todo_del"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/trash1"
-                android:gravity="left" />
-
-            <Button
-                android:id="@+id/btn_record"
-                android:layout_width="25dp"
-                android:layout_height="27dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginBottom="5dp"
-                android:background="@drawable/trash1"
-                android:gravity="left" />
-
-        </LinearLayout>
+        <Button
+            android:id="@+id/todo_del"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/trash1"
+            android:gravity="left" />
 
     </LinearLayout>
 
+        <Button
+            android:id="@+id/btn_record"
+            android:layout_width="25dp"
+            android:layout_height="27dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/success"
+            android:backgroundTint="@color/material_dynamic_neutral60"
+            android:gravity="left" />
+
+    </LinearLayout>
 
 </LinearLayout>

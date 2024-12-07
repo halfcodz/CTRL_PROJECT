@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "controls")
-    public class Control {
+public class Control {
     @PrimaryKey(autoGenerate = true)
     private int id;     // 기본 key
     @ColumnInfo

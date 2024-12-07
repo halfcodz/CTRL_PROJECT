@@ -7,11 +7,11 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/slidedrawer_CategoryName"
+        android:id="@+id/slidedrawer_Control_Item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/rixyeoljeongdoregular"
-        android:text="카테고리 이름"
+        android:text="통제 항목"
         android:textColor="#000"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"

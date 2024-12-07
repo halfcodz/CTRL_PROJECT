@@ -113,9 +113,9 @@ public class CategoryDetail extends AppCompatActivity {
                             newTodo.setCategoryId(categoryId);
 
                             Executors.newSingleThreadExecutor().execute(() -> {
-                                db.controlDao().insert(newTodo);
+                                db.controlDao().insert(newTodo); // 데이터베이스에 저장
                                 runOnUiThread(() -> {
-                                    todoList.add(newTodo);
+                                    todoList.add(newTodo); // 수정: 추가된 항목을 리스트에 업데이트
                                     adapter.notifyDataSetChanged();
                                     detailTodoItem.setText("");
                                 });
@@ -134,9 +134,9 @@ public class CategoryDetail extends AppCompatActivity {
     private void deleteTodoItem(int position) {
         Control todo = todoList.get(position);
         Executors.newSingleThreadExecutor().execute(() -> {
-            db.controlDao().delete(todo);
+            db.controlDao().delete(todo); // 데이터베이스에서 삭제
             runOnUiThread(() -> {
-                todoList.remove(position);
+                todoList.remove(position); // 리스트에서 삭제
                 adapter.notifyItemRemoved(position);
             });
         });
@@ -150,7 +150,7 @@ public class CategoryDetail extends AppCompatActivity {
             Control category = new Control();
             category.setId(categoryId);
             category.setCategory_Name(updatedName);
-            db.controlDao().update(category);
+            db.controlDao().update(category); // 수정: 카테고리 이름 업데이트
 
             Set<Integer> existingIds = new HashSet<>();
             List<Control> existingTodos = db.controlDao().getTodosByCategoryId(categoryId);
@@ -160,13 +160,13 @@ public class CategoryDetail extends AppCompatActivity {
 
             for (Control todo : todoList) {
                 if (todo.getId() == 0) {
-                    db.controlDao().insert(todo);
+                    db.controlDao().insert(todo); // 데이터베이스에 없는 항목 저장
                 } else if (existingIds.contains(todo.getId())) {
-                    db.controlDao().update(todo);
+                    db.controlDao().update(todo); // 데이터베이스에 있는 항목 업데이트
                 }
             }
 
-            runOnUiThread(this::finish);
+            runOnUiThread(this::finish); // 수정: 저장 후 화면 종료
         });
     }
 }

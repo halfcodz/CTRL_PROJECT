@@ -33,7 +33,7 @@ public class TodoSlideDrawer_Adapter extends RecyclerView.Adapter<TodoSlideDrawe
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            categoryName = itemView.findViewById(R.id.slidedrawer_CategoryName);
+            categoryName = itemView.findViewById(R.id.slidedrawer_Control_Item);
             checkBox = itemView.findViewById(R.id.slidedrawer_Checkbox);
         }
     }
