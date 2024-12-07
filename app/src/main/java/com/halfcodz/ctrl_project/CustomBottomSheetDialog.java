@@ -1,6 +1,7 @@
 package com.halfcodz.ctrl_project;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +24,13 @@ public class CustomBottomSheetDialog extends BottomSheetDialogFragment {
     private List<Control> controlList = new ArrayList<>();
     private TodoSlideDrawer_Adapter adapter;
 
-    public void setControlItems(List<String> controlItems) {
+    public void setControlItems(List<Control> controlItems) {
         controlList.clear();
-        for (String item : controlItems) {
-            Control control = new Control();
-            control.setControl_Item(item);
-            controlList.add(control);
+        if (controlItems != null && !controlItems.isEmpty()) {
+            controlList.addAll(controlItems);
+        } else {
+            Log.d("ControlDao", "Loaded Control Items: " + controlItems);
+            controlList.add(new Control()); // 기본 메시지로 채우기
         }
         if (adapter != null) {
             adapter.updateData(controlList);

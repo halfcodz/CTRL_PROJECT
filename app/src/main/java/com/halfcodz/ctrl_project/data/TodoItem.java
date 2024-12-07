@@ -18,13 +18,39 @@ public class TodoItem {
     @ColumnInfo(name = "end_sch")
     public String end_sch;
 
-    public void setItemName(String item) {
+    // Getter and Setter for id
+    public int getId() {
+        return id;
     }
 
-    public void setCategoryId(int categoryId) {
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public long getId() {
-        return 0;
+    // Getter and Setter for title
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    // Getter and Setter for start_sch
+    public String getStart_sch() {
+        return start_sch;
+    }
+
+    public void setStart_sch(String start_sch) {
+        this.start_sch = start_sch;
+    }
+
+    // Getter and Setter for end_sch
+    public String getEnd_sch() {
+        return end_sch;
+    }
+
+    public void setEnd_sch(String end_sch) {
+        this.end_sch = end_sch;
     }
 }

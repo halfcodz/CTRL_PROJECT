@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -19,11 +18,17 @@ public class TodoADD_Adapter extends RecyclerView.Adapter<TodoADD_Adapter.ViewHo
 
     private List<String> categoryNames;
     private Context context;
+    private int selectedPosition = -1;
+    private final OnCategorySelectedListener onCategorySelectedListener;
 
-    // 생성자
-    public TodoADD_Adapter(Context context, List<String> categoryNames) {
+    public interface OnCategorySelectedListener {
+        void onCategorySelected(String categoryName);
+    }
+
+    public TodoADD_Adapter(Context context, List<String> categoryNames, OnCategorySelectedListener listener) {
         this.context = context;
         this.categoryNames = categoryNames;
+        this.onCategorySelectedListener = listener;
     }
 
     @NonNull
@@ -37,9 +42,14 @@ public class TodoADD_Adapter extends RecyclerView.Adapter<TodoADD_Adapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String categoryName = categoryNames.get(position);
 
-        // 카테고리 이름을 TextView에 설정
         holder.categoryNameText.setText(categoryName);
-        holder.radioButton.setChecked(false); // 기본적으로 체크되지 않음
+        holder.radioButton.setChecked(position == selectedPosition);
+
+        holder.radioButton.setOnClickListener(v -> {
+            selectedPosition = position;
+            notifyDataSetChanged();
+            onCategorySelectedListener.onCategorySelected(categoryName); // 카테고리 이름 전달
+        });
     }
 
     @Override
@@ -53,8 +63,6 @@ public class TodoADD_Adapter extends RecyclerView.Adapter<TodoADD_Adapter.ViewHo
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            // item_todolistadd.xml의 View ID 연결
             categoryNameText = itemView.findViewById(R.id.control_item_text);
             radioButton = itemView.findViewById(R.id.todolist_add_RadioButton);
         }
