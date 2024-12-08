@@ -83,6 +83,8 @@ public class FragmentTodolist extends Fragment {
         }).start();
     }
 
+
+
     private void showCustomBottomSheetDialog(TodoItem item) {
         new Thread(() -> {
             List<Control> controlItems = AppDatabase.getDatabase(requireContext())

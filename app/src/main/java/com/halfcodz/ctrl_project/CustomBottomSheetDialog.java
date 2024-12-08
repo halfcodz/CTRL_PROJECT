@@ -33,17 +33,9 @@ public class CustomBottomSheetDialog extends BottomSheetDialogFragment {
 
         if (adapter != null) {
             adapter.updateData(controlList);
-        }
-    }
-
-    public void setSelectedControlItem(String controlItemText) {
-        controlList.clear();
-        Control control = new Control();
-        control.setControlItem(controlItemText);
-        controlList.add(control);
-
-        if (adapter != null) {
-            adapter.updateData(controlList);
+        } else if (recyclerView != null) {
+            adapter = new TodoSlideDrawer_Adapter(getContext(), controlList);
+            recyclerView.setAdapter(adapter);
         }
     }
 

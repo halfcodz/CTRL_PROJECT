@@ -51,15 +51,21 @@ public class TodoMain_Adapter extends RecyclerView.Adapter<TodoMain_Adapter.Todo
 
         // btnRecord 클릭 리스너: 슬라이드드로어 활성화
         holder.btnRecord.setOnClickListener(v -> {
-            saveSelectedControlItem(todo.title);
+            String title = todoItems.get(position).getTitle();
+            CustomBottomSheetDialog customBottomSheetDialog = new CustomBottomSheetDialog();
 
-            // CustomBottomSheetDialog 활성화
-            CustomBottomSheetDialog bottomSheetDialog = new CustomBottomSheetDialog();
             new Thread(() -> {
-                List<Control> controlItems = AppDatabase.getDatabase(context).controlDao().getTodosByCategoryName(todo.title);
-                bottomSheetDialog.setControlList(controlItems);
-                ((FragmentActivity) context).runOnUiThread(() ->
-                        bottomSheetDialog.show(((FragmentActivity) context).getSupportFragmentManager(), "CustomBottomSheet"));
+                List<Control> controlItems = AppDatabase.getDatabase(context)
+                        .controlDao().getTodosByCategoryName(title);
+
+                ((FragmentActivity) context).runOnUiThread(() -> {
+                    if (controlItems.isEmpty()) {
+                        Toast.makeText(context, "해당 통제 항목이 없습니다.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        customBottomSheetDialog.setControlList(controlItems);
+                        customBottomSheetDialog.show(((FragmentActivity) context).getSupportFragmentManager(), "CustomBottomSheet");
+                    }
+                });
             }).start();
         });
 

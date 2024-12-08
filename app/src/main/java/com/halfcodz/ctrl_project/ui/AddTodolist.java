@@ -81,7 +81,32 @@ public class AddTodolist extends AppCompatActivity {
         TnoneText.setOnClickListener(view -> showTimePickerDialog());
 
         // 완료 버튼 클릭 시 일정 저장
-        completion_btn.setOnClickListener(view -> saveTodoItem());
+        completion_btn.setOnClickListener(view -> {
+            executorService.execute(() -> {
+                String title = todoadd_title.getText().toString().trim();
+                String startDate = SnoneText.getText().toString().trim();
+                String endDate = EnoneText.getText().toString().trim();
+                String time = TnoneText.getText().toString().trim();
+
+                if (title.isEmpty() || "없음".equals(startDate) || "없음".equals(endDate) || selectedCategoryName == null) {
+                    runOnUiThread(() -> Toast.makeText(AddTodolist.this, "모든 필드를 입력하세요.", Toast.LENGTH_SHORT).show());
+                    return;
+                }
+
+                TodoItem newTodo = new TodoItem();
+                newTodo.setTitle(title);
+                newTodo.setStart_sch(startDate);
+                newTodo.setEnd_sch(endDate);
+
+                // 데이터베이스에 추가
+                appDatabase.todoItemDao().insert(newTodo);
+
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "일정이 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                    finish();
+                });
+            });
+        });
     }
 
     private void loadCategoryNames() {

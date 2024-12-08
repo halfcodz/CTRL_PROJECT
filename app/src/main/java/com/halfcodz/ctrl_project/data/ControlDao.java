@@ -34,6 +34,8 @@ public interface ControlDao {
 
 
 
+
+
     // 빈 이름 데이터 삭제
     @Query("DELETE FROM controls WHERE category_name IS NULL OR category_name = ''")
     void deleteControlsWithEmptyNames();

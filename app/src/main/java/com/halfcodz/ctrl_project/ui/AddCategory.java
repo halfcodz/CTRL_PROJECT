@@ -96,7 +96,6 @@ public class AddCategory extends AppCompatActivity {
         saveCategoryButton.setEnabled(false);
 
         Executors.newSingleThreadExecutor().execute(() -> {
-            // existsByCategoryName 메서드로 중복 확인
             boolean isDuplicate = database.controlDao().existsByCategoryName(name);
             if (isDuplicate) {
                 runOnUiThread(() -> {

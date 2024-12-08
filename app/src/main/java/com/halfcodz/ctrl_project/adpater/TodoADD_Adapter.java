@@ -53,13 +53,14 @@ public class TodoADD_Adapter extends RecyclerView.Adapter<TodoADD_Adapter.ViewHo
                 selectedPosition = currentPosition;
                 notifyDataSetChanged();
 
-                // DB 조회 수행
                 new Thread(() -> {
-                    boolean categoryExists = AppDatabase.getDatabase(context).controlDao().existsByCategoryName(categoryName);
+                    boolean categoryExists = AppDatabase.getDatabase(context)
+                            .controlDao().existsByCategoryName(categoryName);
+
                     ((RecyclerView) holder.itemView.getParent()).post(() -> {
                         if (categoryExists) {
-                            Toast.makeText(context, "카테고리가 조회되었습니다.", Toast.LENGTH_SHORT).show();
                             onCategorySelectedListener.onCategorySelected(categoryName);
+                            Toast.makeText(context, "카테고리가 선택되었습니다.", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(context, "카테고리를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
                         }
