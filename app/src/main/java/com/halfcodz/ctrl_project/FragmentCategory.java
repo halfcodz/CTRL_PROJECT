@@ -60,7 +60,7 @@ public class FragmentCategory extends Fragment {
 
     private void loadCategories() {
         Executors.newSingleThreadExecutor().execute(() -> {
-            List<Control> categories = db.controlDao().getAllCategories();
+            List<Control> categories = db.controlDao().getAllCategories(); // 모든 카테고리 가져오기
 
             requireActivity().runOnUiThread(() -> {
                 if (categories == null || categories.isEmpty()) {
@@ -68,6 +68,7 @@ public class FragmentCategory extends Fragment {
                     return;
                 }
 
+                // RecyclerView 데이터 초기화
                 if (categoryAdapter == null) {
                     categoryAdapter = new CategoryMain_Adapter(categories, new CategoryMain_Adapter.OnCategoryInteractionListener() {
                         @Override
@@ -94,6 +95,7 @@ public class FragmentCategory extends Fragment {
                     });
                     recyclerView.setAdapter(categoryAdapter);
                 } else {
+                    // 기존 데이터 초기화 후 새 데이터 설정
                     categoryAdapter.updateCategories(categories);
                 }
             });

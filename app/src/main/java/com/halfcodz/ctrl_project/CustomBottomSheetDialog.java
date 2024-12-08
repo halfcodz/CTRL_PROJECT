@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.halfcodz.ctrl_project.adpater.TodoSlideDrawer_Adapter;
+import com.halfcodz.ctrl_project.data.AppDatabase;
 import com.halfcodz.ctrl_project.data.Control;
 
 import java.util.ArrayList;
@@ -23,7 +25,28 @@ public class CustomBottomSheetDialog extends BottomSheetDialogFragment {
     private TodoSlideDrawer_Adapter adapter;
     private List<Control> controlList = new ArrayList<>();
 
-    // 통제 항목 리스트를 설정하는 메서드
+    public void setSelectedCategoryName(String categoryName) {
+        // 선택된 카테고리 이름을 기반으로 필요한 작업을 수행합니다.
+        // 예: 선택된 카테고리의 통제 항목을 로드
+        loadControlsForCategory(categoryName);
+    }
+
+    private void loadControlsForCategory(String categoryName) {
+        // 데이터베이스에서 카테고리 이름으로 통제 항목을 불러와 리사이클러뷰에 업데이트
+        new Thread(() -> {
+            List<Control> controls = AppDatabase.getDatabase(getContext()).controlDao().getTodosByCategoryName(categoryName);
+
+            requireActivity().runOnUiThread(() -> {
+                if (controls != null && !controls.isEmpty()) {
+                    adapter.updateData(controls);
+                } else {
+                    Toast.makeText(getContext(), "해당 카테고리에 통제 항목이 없습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }).start();
+    }
+
+    // 선택된 카테고리의 통제 항목 리스트를 설정하는 메서드
     public void setControlList(List<Control> controls) {
         controlList.clear();
         if (controls != null && !controls.isEmpty()) {
@@ -35,6 +58,7 @@ public class CustomBottomSheetDialog extends BottomSheetDialogFragment {
         }
     }
 
+    // 선택된 통제 항목 하나를 설정하는 메서드
     public void setSelectedControlItem(String controlItemText) {
         controlList.clear();
         Control control = new Control();

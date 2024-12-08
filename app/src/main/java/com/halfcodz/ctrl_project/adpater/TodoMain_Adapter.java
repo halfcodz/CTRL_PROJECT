@@ -111,7 +111,6 @@ public class TodoMain_Adapter extends RecyclerView.Adapter<TodoMain_Adapter.Todo
             todoEnd = itemView.findViewById(R.id.todoEnd);
             todo_del = itemView.findViewById(R.id.todo_del);
             todolist_detail = itemView.findViewById(R.id.todolist_detail);
-            btnRecord = itemView.findViewById(R.id.btn_record);
         }
     }
 }

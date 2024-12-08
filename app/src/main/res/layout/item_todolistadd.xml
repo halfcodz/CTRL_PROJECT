@@ -7,6 +7,14 @@
     android:orientation="horizontal"
     android:padding="8dp">
 
+    <RadioButton
+        android:id="@+id/todolist_add_RadioButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textSize="16sp"
+        android:layout_gravity="right"/>
+
     <TextView
         android:id="@+id/control_item_text"
         android:layout_width="wrap_content"
@@ -19,17 +27,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <RadioGroup
-        android:id="@+id/todolist_add_RadioGroup"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <RadioButton
-            android:id="@+id/todolist_add_RadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:textSize="16sp"
-            android:layout_gravity="right"/>
-    </RadioGroup>
 </LinearLayout>

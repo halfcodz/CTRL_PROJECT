@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-public class AddCategory extends AppCompatActivity {
+    public class AddCategory extends AppCompatActivity {
 
     private EditText categoryName;
     private EditText todoItem;
@@ -119,7 +119,6 @@ public class AddCategory extends AppCompatActivity {
 
             for (Control control : todoItems) {
                 control.setCategoryId((int) categoryId);
-                control.setCategoryName(name);
                 database.controlDao().insert(control);
             }
 
