@@ -29,13 +29,10 @@
             android:backgroundTint="@color/material_dynamic_neutral60" />
     </LinearLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/slidedrawer_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:visibility="visible" />
+        android:layout_height="300dp" />
 
     <Button
         android:layout_marginTop="5dp"

@@ -16,6 +16,7 @@ import com.halfcodz.ctrl_project.R;
 import com.halfcodz.ctrl_project.adpater.TodoADD_Adapter;
 import com.halfcodz.ctrl_project.data.AppDatabase;
 import com.halfcodz.ctrl_project.data.Control;
+import com.halfcodz.ctrl_project.data.TodoItem;
 
 import java.util.Calendar;
 import java.util.List;
@@ -40,12 +41,18 @@ public class AddTodolist extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addtodolist);
 
+        // View 초기화
         initializeViews();
+
+        // DB 및 RecyclerView 설정
         appDatabase = AppDatabase.getDatabase(this);
+        recyclerViewTodolistAddCategory.setLayoutManager(new LinearLayoutManager(this));
+
         customBottomSheetDialog = new CustomBottomSheetDialog();
 
-        recyclerViewTodolistAddCategory.setLayoutManager(new LinearLayoutManager(this));
         loadCategoryNames();
+
+        setClickListeners();
     }
 
     private void initializeViews() {
@@ -60,13 +67,25 @@ public class AddTodolist extends AppCompatActivity {
         completion_btn = findViewById(R.id.completion_btn);
     }
 
+    private void setClickListeners() {
+        startDateText.setOnClickListener(view -> showDatePickerDialog(SnoneText));
+        SnoneText.setOnClickListener(view -> showDatePickerDialog(SnoneText));
+        endDateText.setOnClickListener(view -> showDatePickerDialog(EnoneText));
+        EnoneText.setOnClickListener(view -> showDatePickerDialog(EnoneText));
+        timeText.setOnClickListener(view -> showTimePickerDialog());
+        TnoneText.setOnClickListener(view -> showTimePickerDialog());
+
+        // 완료 버튼 클릭 시 일정 저장
+        completion_btn.setOnClickListener(view -> saveTodoItem());
+    }
+
     private void loadCategoryNames() {
         executorService.execute(() -> {
             List<String> categoryNames = appDatabase.controlDao().getAllCategoryNames();
 
             runOnUiThread(() -> {
-                todoADDAdapter = new TodoADD_Adapter(this, categoryNames, categoryName -> {
-                    selectedCategoryName = categoryName;
+                todoADDAdapter = new TodoADD_Adapter(this, categoryNames, selectedCategoryName -> {
+                    this.selectedCategoryName = selectedCategoryName;
                     loadControlsForSelectedCategory();
                 });
                 recyclerViewTodolistAddCategory.setAdapter(todoADDAdapter);
@@ -78,16 +97,63 @@ public class AddTodolist extends AppCompatActivity {
         if (selectedCategoryName == null) return;
 
         executorService.execute(() -> {
-            List<Control> controls = appDatabase.controlDao().getTodosByCategoryName(selectedCategoryName);
+            List<Control> controlItems = appDatabase.controlDao().getTodosByCategoryName(selectedCategoryName);
 
             runOnUiThread(() -> {
-                if (controls == null || controls.isEmpty()) {
+                if (controlItems == null || controlItems.isEmpty()) {
                     Toast.makeText(this, "해당 카테고리에 통제 항목이 없습니다.", Toast.LENGTH_SHORT).show();
                 } else {
-                    customBottomSheetDialog.setControlList(controls);
+                    customBottomSheetDialog.setControlList(controlItems);
                     customBottomSheetDialog.show(getSupportFragmentManager(), "CustomBottomSheet");
                 }
             });
         });
+    }
+
+    private void saveTodoItem() {
+        executorService.execute(() -> {
+            try {
+                String title = todoadd_title.getText().toString().trim();
+                String startDate = SnoneText.getText().toString().trim();
+                String endDate = EnoneText.getText().toString().trim();
+                String time = TnoneText.getText().toString().trim();
+
+                if (title.isEmpty() || "없음".equals(startDate) || "없음".equals(endDate) || selectedCategoryName == null) {
+                    runOnUiThread(() -> Toast.makeText(AddTodolist.this, "모든 필드를 입력하세요.", Toast.LENGTH_SHORT).show());
+                    return;
+                }
+
+                // TodoItem 저장
+                TodoItem todoItem = new TodoItem();
+                todoItem.setTitle(title);
+                todoItem.setStart_sch(startDate);
+                todoItem.setEnd_sch(endDate);
+
+                appDatabase.todoItemDao().insert(todoItem);
+
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Todo 항목이 저장되었습니다.", Toast.LENGTH_SHORT).show();
+                    finish();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(AddTodolist.this, "에러 발생: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+        });
+    }
+
+    private void showTimePickerDialog() {
+        int hour = 12, minute = 0;
+        new TimePickerDialog(this, (view, selectedHour, selectedMinute) ->
+                TnoneText.setText(String.format("%02d:%02d", selectedHour, selectedMinute)), hour, minute, true
+        ).show();
+    }
+
+    private void showDatePickerDialog(Button targetButton) {
+        Calendar calendar = Calendar.getInstance();
+        new DatePickerDialog(this, (view, year, month, day) ->
+                targetButton.setText(String.format("%d-%02d-%02d", year, month + 1, day)),
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
+        ).show();
     }
 }

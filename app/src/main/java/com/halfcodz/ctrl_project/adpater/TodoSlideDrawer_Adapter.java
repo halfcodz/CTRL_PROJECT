@@ -17,11 +17,11 @@ import java.util.List;
 public class TodoSlideDrawer_Adapter extends RecyclerView.Adapter<TodoSlideDrawer_Adapter.ViewHolder> {
 
     private final Context context;
-    private List<Control> controlList;
+    private List<Control> controlItems;
 
-    public TodoSlideDrawer_Adapter(Context context, List<Control> controlList) {
+    public TodoSlideDrawer_Adapter(Context context, List<Control> controlItems) {
         this.context = context;
-        this.controlList = controlList;
+        this.controlItems = controlItems;
     }
 
     @NonNull
@@ -33,29 +33,27 @@ public class TodoSlideDrawer_Adapter extends RecyclerView.Adapter<TodoSlideDrawe
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        if (controlList == null || controlList.isEmpty()) {
-            holder.controlItemName.setText("통제 항목이 없습니다.");
-        } else {
-            holder.controlItemName.setText(controlList.get(position).getControlItem());
-        }
+        Control control = controlItems.get(position);
+        holder.controlItemName.setText(control.getControlItem() != null ? control.getControlItem() : "항목 없음");
     }
 
     @Override
     public int getItemCount() {
-        return controlList != null ? controlList.size() : 0;
+        return controlItems.size();
     }
 
-    public void updateData(List<Control> newControlList) {
-        this.controlList = newControlList;
+    // 추가된 updateData 메서드
+    public void updateData(List<Control> newControlItems) {
+        this.controlItems = newControlItems;
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        final TextView controlItemName;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView controlItemName;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            controlItemName = itemView.findViewById(R.id.slidedrawer_Control_Item);
+            controlItemName = itemView.findViewById(R.id.controlItemName);
         }
     }
 }

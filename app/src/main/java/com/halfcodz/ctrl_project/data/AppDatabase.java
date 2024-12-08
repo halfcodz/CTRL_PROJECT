@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Control.class, TodoItem.class, Focus.class}, version = 6, exportSchema = false)
+@Database(entities = {Control.class, TodoItem.class, Focus.class}, version = 5, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase instance;
 
@@ -27,6 +27,7 @@ public abstract class AppDatabase extends RoomDatabase {
         }
         return instance;
     }
+
 
     // 1 -> 2 마이그레이션: `todoitem` 테이블 재생성
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {

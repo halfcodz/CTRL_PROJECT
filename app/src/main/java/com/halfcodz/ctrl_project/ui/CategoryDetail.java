@@ -22,62 +22,55 @@ import java.util.concurrent.Executors;
 
 public class CategoryDetail extends AppCompatActivity {
 
-    // View 요소 선언
-    private EditText detailCategoryName; // 카테고리 이름 입력 필드
-    private EditText detailTodoItem; // 새로운 통제 항목 입력 필드
-    private Button detailAddTodoButton; // 통제 항목 추가 버튼
-    private Button detailSaveCategoryButton; // 카테고리 저장 버튼
-    private RecyclerView detailRecyclerView; // RecyclerView
+    private EditText detailCategoryName;
+    private EditText detailTodoItem;
+    private Button detailAddTodoButton;
+    private Button detailSaveCategoryButton;
+    private RecyclerView detailRecyclerView;
 
-    private CategoryDetail_Adapter adapter; // 어댑터
-    private List<Control> todoList; // 통제 항목 리스트
-    private AppDatabase db; // Room Database
-    private int categoryId; // 카테고리 ID
+    private CategoryDetail_Adapter adapter;
+    private List<Control> todoList;
+    private AppDatabase db;
+    private int categoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailcategory);
 
-        // View 초기화
         detailCategoryName = findViewById(R.id.detailCategoryName);
         detailTodoItem = findViewById(R.id.detailTodoItem);
         detailAddTodoButton = findViewById(R.id.detailaddTodoButton);
         detailSaveCategoryButton = findViewById(R.id.detailsaveCategoryButton);
         detailRecyclerView = findViewById(R.id.detailRecyclerView);
 
-        // Room Database 인스턴스 가져오기
         db = AppDatabase.getDatabase(getApplicationContext());
 
-        // RecyclerView 설정
         todoList = new ArrayList<>();
         adapter = new CategoryDetail_Adapter(todoList, this::deleteTodoItem);
         detailRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         detailRecyclerView.setAdapter(adapter);
 
-        // Intent에서 category_id를 받아서 처리
         categoryId = getIntent().getIntExtra("category_id", -1);
         if (categoryId != -1) {
-            Log.d("CategoryDetail", "Loaded category ID: " + categoryId);
-            loadCategoryDetails(categoryId); // 올바르게 categoryId 전달
+            loadCategoryDetails(categoryId);
         } else {
             Log.e("CategoryDetail", "Invalid category ID");
         }
 
-        // 버튼 클릭 리스너 설정
         detailAddTodoButton.setOnClickListener(v -> addTodoItem());
         detailSaveCategoryButton.setOnClickListener(v -> saveCategory());
     }
 
     private void loadCategoryDetails(int categoryId) {
         Executors.newSingleThreadExecutor().execute(() -> {
-            // 카테고리 이름 가져오기
-            String categoryName = db.controlDao().getAllCategoryNames().toString();
+            String categoryName = db.controlDao().getTodosByCategoryId(categoryId).stream()
+                    .map(Control::getCategoryName)
+                    .findFirst()
+                    .orElse(null);
 
-            // 해당 카테고리의 통제 항목 리스트 가져오기
             List<Control> todos = db.controlDao().getTodosByCategoryId(categoryId);
 
-            // UI 업데이트 (Main Thread)
             runOnUiThread(() -> {
                 if (categoryName != null) {
                     detailCategoryName.setText(categoryName);
@@ -94,36 +87,28 @@ public class CategoryDetail extends AppCompatActivity {
     private void addTodoItem() {
         String todoText = detailTodoItem.getText().toString().trim();
         if (!todoText.isEmpty()) {
-            boolean isDuplicate = false;
-
-            for (Control todo : todoList) {
-                if (todo.getControlItem().equals(todoText)) {
-                    isDuplicate = true;
-                    break;
-                }
-            }
+            boolean isDuplicate = todoList.stream()
+                    .anyMatch(todo -> todo.getControlItem().equalsIgnoreCase(todoText));
 
             if (!isDuplicate) {
                 Executors.newSingleThreadExecutor().execute(() -> {
                     boolean existsInDb = db.controlDao().existsByCategoryAndItem(categoryId, todoText);
-                    runOnUiThread(() -> {
-                        if (!existsInDb) {
-                            Control newTodo = new Control();
-                            newTodo.setCategoryName(todoText);
-                            newTodo.setCategoryId(categoryId);
+                    if (!existsInDb) {
+                        Control newTodo = new Control();
+                        newTodo.setControlItem(todoText);
+                        newTodo.setCategoryId(categoryId);
 
-                            Executors.newSingleThreadExecutor().execute(() -> {
-                                db.controlDao().insert(newTodo); // 데이터베이스에 저장
-                                runOnUiThread(() -> {
-                                    todoList.add(newTodo); // 수정: 추가된 항목을 리스트에 업데이트
-                                    adapter.notifyDataSetChanged();
-                                    detailTodoItem.setText("");
-                                });
-                            });
-                        } else {
-                            detailTodoItem.setError("이미 존재하는 항목입니다.");
-                        }
-                    });
+                        long newTodoId = db.controlDao().insert(newTodo);
+                        newTodo.setId((int) newTodoId);
+
+                        runOnUiThread(() -> {
+                            todoList.add(newTodo);
+                            adapter.notifyDataSetChanged();
+                            detailTodoItem.setText("");
+                        });
+                    } else {
+                        runOnUiThread(() -> detailTodoItem.setError("이미 존재하는 항목입니다."));
+                    }
                 });
             } else {
                 detailTodoItem.setError("이미 존재하는 항목입니다.");
@@ -134,9 +119,9 @@ public class CategoryDetail extends AppCompatActivity {
     private void deleteTodoItem(int position) {
         Control todo = todoList.get(position);
         Executors.newSingleThreadExecutor().execute(() -> {
-            db.controlDao().delete(todo); // 데이터베이스에서 삭제
+            db.controlDao().delete(todo);
             runOnUiThread(() -> {
-                todoList.remove(position); // 리스트에서 삭제
+                todoList.remove(position);
                 adapter.notifyItemRemoved(position);
             });
         });
@@ -144,13 +129,16 @@ public class CategoryDetail extends AppCompatActivity {
 
     private void saveCategory() {
         String updatedName = detailCategoryName.getText().toString().trim();
-        if (updatedName.isEmpty()) return;
+        if (updatedName.isEmpty()) {
+            detailCategoryName.setError("카테고리 이름을 입력하세요.");
+            return;
+        }
 
         Executors.newSingleThreadExecutor().execute(() -> {
             Control category = new Control();
             category.setId(categoryId);
             category.setCategoryName(updatedName);
-            db.controlDao().update(category); // 수정: 카테고리 이름 업데이트
+            db.controlDao().update(category);
 
             Set<Integer> existingIds = new HashSet<>();
             List<Control> existingTodos = db.controlDao().getTodosByCategoryId(categoryId);
@@ -159,14 +147,14 @@ public class CategoryDetail extends AppCompatActivity {
             }
 
             for (Control todo : todoList) {
-                if (todo.getId() == 0) {
-                    db.controlDao().insert(todo); // 데이터베이스에 없는 항목 저장
-                } else if (existingIds.contains(todo.getId())) {
-                    db.controlDao().update(todo); // 데이터베이스에 있는 항목 업데이트
+                if (!existingIds.contains(todo.getId())) {
+                    db.controlDao().insert(todo);
+                } else {
+                    db.controlDao().update(todo);
                 }
             }
 
-            runOnUiThread(this::finish); // 수정: 저장 후 화면 종료
+            runOnUiThread(this::finish);
         });
     }
 }

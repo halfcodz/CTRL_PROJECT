@@ -32,7 +32,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editCategoryName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:textColor="#404040"
         app:layout_constraintTop_toBottomOf="@+id/action_bar02" />
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTodoItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
 
     <!--        ui -> 버튼 모양 바꿔야함-->
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/addTodoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
         app:layout_constraintTop_toBottomOf="@id/editTodoItem" />
 
     <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/todoRecyclerView"
+        android:id="@+id/todoRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:layout_margin="10dp"
@@ -80,7 +80,7 @@
 
 
     <!-- 카테고리 이름과 아이템 입력 필드 유지 -->
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/saveCategoryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

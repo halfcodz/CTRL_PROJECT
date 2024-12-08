@@ -7,13 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.halfcodz.ctrl_project.R;
-import com.halfcodz.ctrl_project.data.AppDatabase;
 import com.halfcodz.ctrl_project.data.Control;
 
 import java.util.List;
@@ -42,17 +40,13 @@ public class CategoryAdd_Adapter extends RecyclerView.Adapter<CategoryAdd_Adapte
         holder.todoName.setText(control.getControlItem() != null ? control.getControlItem() : "항목 없음");
 
         holder.deleteButton.setOnClickListener(view -> {
-            Control itemToDelete = todoItems.get(position);
-
             // UI에서 항목 삭제
-            todoItems.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, todoItems.size());
-
-            // 데이터베이스에서 항목 삭제 (스레드 내에서)
-            new Thread(() -> {
-                AppDatabase.getDatabase(context).controlDao().delete(itemToDelete);
-            }).start();
+            int adapterPosition = holder.getAdapterPosition();
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                todoItems.remove(adapterPosition);
+                notifyItemRemoved(adapterPosition);
+                notifyItemRangeChanged(adapterPosition, todoItems.size());
+            }
         });
     }
 
