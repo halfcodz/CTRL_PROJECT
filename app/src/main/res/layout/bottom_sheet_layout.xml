@@ -20,7 +20,7 @@
             android:textSize="30sp"
             android:layout_margin="5dp"
             android:text="성공"
-            android:background="#C3CDFA" />
+            android:background="@drawable/button_pressed_success" />
 
         <Button
             android:id="@+id/missonFail"
@@ -32,7 +32,7 @@
             android:textSize="30sp"
             android:layout_margin="5dp"
             android:text="실패"
-            android:background="#FFCCCC" />
+            android:background="@drawable/button_pressed_fail"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
