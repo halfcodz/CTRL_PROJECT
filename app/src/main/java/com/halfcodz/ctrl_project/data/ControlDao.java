@@ -12,30 +12,35 @@ import java.util.List;
 public interface ControlDao {
 
     // 카테고리 ID를 기준으로 통제 항목 가져오기
-    @Query("SELECT * FROM controls WHERE categoryId = :categoryId")
+    @Query("SELECT * FROM controls WHERE category_id = :categoryId")
     List<Control> getTodosByCategoryId(int categoryId);
 
-    // 특정 카테고리 이름 가져오기
-    @Query("SELECT Category_Name FROM controls WHERE id = :categoryId")
-    String getCategory_Name(int categoryId);
+    // 모든 카테고리 가져오기 (전체 필드 반환)
+    @Query("SELECT * FROM controls WHERE category_name IS NOT NULL AND category_name != ''")
+    List<Control> getAllCategories();
 
-    // 모든 카테고리 이름 가져오기
-    @Query("SELECT DISTINCT Category_Name FROM controls WHERE Category_Name IS NOT NULL AND Category_Name != ''")
-    List<String> getAllCategoryNames();
+    // 카테고리 이름으로 중복 확인 메서드 추가
+    @Query("SELECT EXISTS(SELECT 1 FROM controls WHERE category_name = :categoryName LIMIT 1)")
+    boolean existsByCategoryName(String categoryName);
 
-    // **수정된 부분: 카테고리 이름으로 통제 항목 가져오기**
-    @Query("SELECT * FROM controls WHERE Category_Name = :categoryName")
+
+    // 카테고리 이름으로 통제 항목 가져오기
+    @Query("SELECT * FROM controls WHERE category_name = :categoryName")
     List<Control> getTodosByCategoryName(String categoryName);
 
     // 중복 확인: 카테고리 ID와 항목 이름 기준
-    @Query("SELECT EXISTS(SELECT 1 FROM controls WHERE categoryId = :categoryId AND Control_Item = :itemName LIMIT 1)")
+    @Query("SELECT EXISTS(SELECT 1 FROM controls WHERE category_id = :categoryId AND control_item = :itemName LIMIT 1)")
     boolean existsByCategoryAndItem(int categoryId, String itemName);
 
+
+
     // 빈 이름 데이터 삭제
-    // **수정된 부분: deleteControlsWithEmptyNames 유지 조건 검토**
-    @Query("DELETE FROM controls WHERE Category_Name IS NULL OR Category_Name = ''")
+    @Query("DELETE FROM controls WHERE category_name IS NULL OR category_name = ''")
     void deleteControlsWithEmptyNames();
 
+    // 모든 카테고리 이름 가져오기 (중복 제거)
+    @Query("SELECT DISTINCT category_name FROM controls WHERE category_name IS NOT NULL AND category_name != ''")
+    List<String> getAllCategoryNames();
 
     // 데이터 삽입
     @Insert
@@ -43,13 +48,13 @@ public interface ControlDao {
 
     // 데이터 삭제
     @Delete
-    void delete(Control controls);
+    void delete(Control control);
 
     // 데이터 업데이트
     @Update
     void update(Control control);
 
-    // **수정된 부분: 첫 번째 Control ID 가져오기**
+    // 첫 번째 Control ID 가져오기
     @Query("SELECT id FROM controls LIMIT 1")
     int getFirstControlId();
 }

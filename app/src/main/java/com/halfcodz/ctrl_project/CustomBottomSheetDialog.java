@@ -1,7 +1,6 @@
 package com.halfcodz.ctrl_project;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,17 +20,28 @@ import java.util.List;
 
 public class CustomBottomSheetDialog extends BottomSheetDialogFragment {
 
-    private List<Control> controlList = new ArrayList<>();
+    private RecyclerView recyclerView;
     private TodoSlideDrawer_Adapter adapter;
+    private List<Control> controlList = new ArrayList<>();
 
-    public void setControlItems(List<Control> controlItems) {
+    // 통제 항목 리스트를 설정하는 메서드
+    public void setControlList(List<Control> controls) {
         controlList.clear();
-        if (controlItems != null && !controlItems.isEmpty()) {
-            controlList.addAll(controlItems);
-        } else {
-            Log.d("ControlDao", "Loaded Control Items: " + controlItems);
-            controlList.add(new Control()); // 기본 메시지로 채우기
+        if (controls != null && !controls.isEmpty()) {
+            controlList.addAll(controls);
         }
+
+        if (adapter != null) {
+            adapter.updateData(controlList);
+        }
+    }
+
+    public void setSelectedControlItem(String controlItemText) {
+        controlList.clear();
+        Control control = new Control();
+        control.setControlItem(controlItemText);
+        controlList.add(control);
+
         if (adapter != null) {
             adapter.updateData(controlList);
         }
@@ -47,7 +57,7 @@ public class CustomBottomSheetDialog extends BottomSheetDialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        RecyclerView recyclerView = view.findViewById(R.id.slidedrawer_recyclerview);
+        recyclerView = view.findViewById(R.id.slidedrawer_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         adapter = new TodoSlideDrawer_Adapter(getContext(), controlList);

@@ -2,6 +2,7 @@ package com.halfcodz.ctrl_project.ui;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,9 +32,11 @@ public class AddTodolist extends AppCompatActivity {
     private AppDatabase appDatabase;
     private RecyclerView recyclerViewTodolistAddCategory;
     private TodoADD_Adapter todoADDAdapter;
+    private CustomBottomSheetDialog customBottomSheetDialog;
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-    private CustomBottomSheetDialog customBottomSheetDialog;
+    private SharedPreferences sharedPreferences;
+    private String selectedCategoryName = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +46,16 @@ public class AddTodolist extends AppCompatActivity {
         // View 초기화
         initializeViews();
 
+        // SharedPreferences 초기화
+        sharedPreferences = getSharedPreferences("com.halfcodz.ctrl_project.PREFS", MODE_PRIVATE);
+
         // DB 및 RecyclerView 설정
         appDatabase = AppDatabase.getDatabase(this);
         recyclerViewTodolistAddCategory.setLayoutManager(new LinearLayoutManager(this));
+
         customBottomSheetDialog = new CustomBottomSheetDialog();
 
-        // **수정된 부분: deleteControlsWithEmptyNames 호출 제거**
-        executorService.execute(() -> loadCategoryNames());
+        loadCategoryNames();
 
         setClickListeners();
     }
@@ -73,6 +79,8 @@ public class AddTodolist extends AppCompatActivity {
         EnoneText.setOnClickListener(view -> showDatePickerDialog(EnoneText));
         timeText.setOnClickListener(view -> showTimePickerDialog());
         TnoneText.setOnClickListener(view -> showTimePickerDialog());
+
+        // 완료 버튼 클릭 시 일정 저장
         completion_btn.setOnClickListener(view -> saveTodoItem());
     }
 
@@ -82,18 +90,26 @@ public class AddTodolist extends AppCompatActivity {
 
             runOnUiThread(() -> {
                 todoADDAdapter = new TodoADD_Adapter(this, categoryNames, selectedCategoryName -> {
-                    executorService.execute(() -> {
-                        List<Control> controlItems = appDatabase.controlDao().getTodosByCategoryName(selectedCategoryName);
-                        runOnUiThread(() -> {
-                            if (controlItems == null || controlItems.isEmpty()) {
-                                Toast.makeText(this, "해당 카테고리에 통제 항목이 없습니다.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                customBottomSheetDialog.setControlItems(controlItems);
-                            }
-                        });
-                    });
+                    this.selectedCategoryName = selectedCategoryName;
+                    loadControlsForSelectedCategory();
                 });
                 recyclerViewTodolistAddCategory.setAdapter(todoADDAdapter);
+            });
+        });
+    }
+
+    private void loadControlsForSelectedCategory() {
+        if (selectedCategoryName == null) return;
+
+        executorService.execute(() -> {
+            List<Control> controlItems = appDatabase.controlDao().getTodosByCategoryName(selectedCategoryName);
+
+            runOnUiThread(() -> {
+                if (controlItems == null || controlItems.isEmpty()) {
+                    Toast.makeText(this, "해당 카테고리에 통제 항목이 없습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    customBottomSheetDialog.setControlList(controlItems);
+                }
             });
         });
     }
@@ -106,7 +122,7 @@ public class AddTodolist extends AppCompatActivity {
                 String endDate = EnoneText.getText().toString();
                 String time = TnoneText.getText().toString();
 
-                if (title.isEmpty() || "없음".equals(startDate) || "없음".equals(endDate) || "없음".equals(time)) {
+                if (title.isEmpty() || "없음".equals(startDate) || "없음".equals(endDate) || "없음".equals(time) || selectedCategoryName == null) {
                     runOnUiThread(() -> Toast.makeText(AddTodolist.this, "모든 필드를 입력하세요.", Toast.LENGTH_SHORT).show());
                     return;
                 }
@@ -139,7 +155,7 @@ public class AddTodolist extends AppCompatActivity {
     private void showDatePickerDialog(Button targetButton) {
         Calendar calendar = Calendar.getInstance();
         new DatePickerDialog(this, (view, year, month, day) ->
-                targetButton.setText(String.format("%d-%d-%d", year, month + 1, day)),
+                targetButton.setText(String.format("%d-%02d-%02d", year, month + 1, day)),
                 calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
         ).show();
     }

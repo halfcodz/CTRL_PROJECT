@@ -8,7 +8,6 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.halfcodz.ctrl_project.adpater.CategoryDetail_Adapter;
 import com.halfcodz.ctrl_project.data.AppDatabase;
 import com.halfcodz.ctrl_project.data.Control;
@@ -72,7 +71,7 @@ public class CategoryDetail extends AppCompatActivity {
     private void loadCategoryDetails(int categoryId) {
         Executors.newSingleThreadExecutor().execute(() -> {
             // 카테고리 이름 가져오기
-            String categoryName = db.controlDao().getCategory_Name(categoryId);
+            String categoryName = db.controlDao().getAllCategoryNames().toString();
 
             // 해당 카테고리의 통제 항목 리스트 가져오기
             List<Control> todos = db.controlDao().getTodosByCategoryId(categoryId);
@@ -97,7 +96,7 @@ public class CategoryDetail extends AppCompatActivity {
             boolean isDuplicate = false;
 
             for (Control todo : todoList) {
-                if (todo.getControl_Item().equals(todoText)) {
+                if (todo.getControlItem().equals(todoText)) {
                     isDuplicate = true;
                     break;
                 }
@@ -109,7 +108,7 @@ public class CategoryDetail extends AppCompatActivity {
                     runOnUiThread(() -> {
                         if (!existsInDb) {
                             Control newTodo = new Control();
-                            newTodo.setControl_Item(todoText);
+                            newTodo.setCategoryName(todoText);
                             newTodo.setCategoryId(categoryId);
 
                             Executors.newSingleThreadExecutor().execute(() -> {
@@ -149,7 +148,7 @@ public class CategoryDetail extends AppCompatActivity {
         Executors.newSingleThreadExecutor().execute(() -> {
             Control category = new Control();
             category.setId(categoryId);
-            category.setCategory_Name(updatedName);
+            category.setCategoryName(updatedName);
             db.controlDao().update(category); // 수정: 카테고리 이름 업데이트
 
             Set<Integer> existingIds = new HashSet<>();

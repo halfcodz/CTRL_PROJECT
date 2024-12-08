@@ -36,7 +36,7 @@ public class TodoSlideDrawer_Adapter extends RecyclerView.Adapter<TodoSlideDrawe
         if (controlList == null || controlList.isEmpty()) {
             holder.controlItemName.setText("통제 항목이 없습니다.");
         } else {
-            holder.controlItemName.setText(controlList.get(position).getControl_Item());
+            holder.controlItemName.setText(controlList.get(position).getControlItem());
         }
     }
 

@@ -1,5 +1,6 @@
 package com.halfcodz.ctrl_project.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,57 +29,58 @@ public class AddCategory extends AppCompatActivity {
     private CategoryAdd_Adapter todoAdapter;
     private List<Control> todoItems;
     private AppDatabase database;
+    private boolean isSaving = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addcategory);
 
+        initializeViews();
+        database = AppDatabase.getDatabase(getApplicationContext());
+        setupRecyclerView();
+
+        addTodoButton.setOnClickListener(v -> addTodoItem());
+        saveCategoryButton.setOnClickListener(v -> saveCategoryAndNavigate());
+    }
+
+    private void initializeViews() {
         categoryName = findViewById(R.id.editCategoryName);
         todoItem = findViewById(R.id.editTodoItem);
         addTodoButton = findViewById(R.id.addTodoButton);
         saveCategoryButton = findViewById(R.id.saveCategoryButton);
         todoRecyclerView = findViewById(R.id.todoRecyclerView);
+    }
 
-        database = AppDatabase.getDatabase(getApplicationContext());
-
+    private void setupRecyclerView() {
         todoItems = new ArrayList<>();
-        todoAdapter = new CategoryAdd_Adapter(todoItems);
+        todoAdapter = new CategoryAdd_Adapter(this, todoItems);
         todoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         todoRecyclerView.setAdapter(todoAdapter);
-
-        addTodoButton.setOnClickListener(v -> addTodoItem()); // 기존 기능 유지
-        saveCategoryButton.setOnClickListener(v -> saveCategoryAndNavigate()); // 수정: 화면 전환 포함
     }
 
     private void addTodoItem() {
         String item = todoItem.getText().toString().trim();
-
         if (item.isEmpty()) {
-            Toast.makeText(this, "통제항목을 입력하세요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "통제 항목을 입력하세요", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        boolean isDuplicate = false;
         for (Control control : todoItems) {
-            if (control.getControl_Item() != null && control.getControl_Item().equalsIgnoreCase(item)) {
-                isDuplicate = true;
-                break;
+            if (control.getControlItem() != null && control.getControlItem().equalsIgnoreCase(item)) {
+                Toast.makeText(this, "이미 존재하는 항목입니다", Toast.LENGTH_SHORT).show();
+                return;
             }
         }
-
-        if (isDuplicate) {
-            Toast.makeText(this, "이미 존재하는 항목입니다", Toast.LENGTH_SHORT).show();
-        } else {
-            Control control = new Control();
-            control.setControl_Item(item);
-            todoItems.add(control);
-            todoAdapter.notifyDataSetChanged();
-            todoItem.setText("");
-        }
+        Control control = new Control();
+        control.setControlItem(item);
+        todoItems.add(control);
+        todoAdapter.notifyDataSetChanged();
+        todoItem.setText("");
     }
 
     private void saveCategoryAndNavigate() {
+        if (isSaving) return; // 이미 저장 중이면 실행하지 않음
+
         String name = categoryName.getText().toString().trim();
         if (name.isEmpty()) {
             Toast.makeText(this, "카테고리 이름을 입력하세요", Toast.LENGTH_SHORT).show();
@@ -90,37 +92,37 @@ public class AddCategory extends AppCompatActivity {
             return;
         }
 
+        isSaving = true;
+        saveCategoryButton.setEnabled(false);
+
         Executors.newSingleThreadExecutor().execute(() -> {
-            boolean isCategoryNameDuplicate = checkDuplicateCategoryName(name);
-            if (isCategoryNameDuplicate) {
-                runOnUiThread(() -> Toast.makeText(this, "이미 존재하는 카테고리 이름입니다", Toast.LENGTH_SHORT).show());
+            // existsByCategoryName 메서드로 중복 확인
+            boolean isDuplicate = database.controlDao().existsByCategoryName(name);
+            if (isDuplicate) {
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "이미 존재하는 카테고리 이름입니다", Toast.LENGTH_SHORT).show();
+                    saveCategoryButton.setEnabled(true);
+                    isSaving = false;
+                });
                 return;
             }
 
-            // 카테고리 및 항목 데이터 저장
             Control category = new Control();
-            category.setCategory_Name(name);
+            category.setCategoryName(name);
             long categoryId = database.controlDao().insert(category);
 
             for (Control control : todoItems) {
                 control.setCategoryId((int) categoryId);
+                control.setCategoryName(name);
                 database.controlDao().insert(control);
             }
 
             runOnUiThread(() -> {
                 Toast.makeText(this, "카테고리가 저장되었습니다", Toast.LENGTH_SHORT).show();
-                finish(); // 이전 화면으로 돌아감
+                isSaving = false;
+                setResult(RESULT_OK);
+                finish();
             });
         });
-    }
-
-    private boolean checkDuplicateCategoryName(String name) {
-        List<String> allCategoryNames = database.controlDao().getAllCategoryNames();
-        for (String categoryName : allCategoryNames) {
-            if (categoryName != null && categoryName.equalsIgnoreCase(name)) {
-                return true;
-            }
-        }
-        return false;
     }
 }

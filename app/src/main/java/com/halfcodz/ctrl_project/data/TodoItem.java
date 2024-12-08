@@ -18,6 +18,12 @@ public class TodoItem {
     @ColumnInfo(name = "end_sch")
     public String end_sch;
 
+    @ColumnInfo(name = "categoryId") // **카테고리 ID 필드 추가**
+    private int categoryId;
+
+    @ColumnInfo(name = "time") // **시간 필드 추가**
+    private String time;
+
     // Getter and Setter for id
     public int getId() {
         return id;
@@ -52,5 +58,23 @@ public class TodoItem {
 
     public void setEnd_sch(String end_sch) {
         this.end_sch = end_sch;
+    }
+
+    // **Getter and Setter for categoryId**
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    // **Getter and Setter for time**
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

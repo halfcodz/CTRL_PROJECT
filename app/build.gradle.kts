@@ -14,6 +14,18 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments.put("room.schemaLocation", "$projectDir/schemas".toString())
+            }
+        }
+
+    }
+
+    buildFeatures {
+        // View Binding 활성화
+        viewBinding = true
     }
 
     buildTypes {

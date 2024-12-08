@@ -6,20 +6,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.halfcodz.ctrl_project.data.AppDatabase;
 import com.inhatc.real_project.R;
 
 import java.util.List;
 
 public class TodoADD_Adapter extends RecyclerView.Adapter<TodoADD_Adapter.ViewHolder> {
 
-    private List<String> categoryNames;
-    private Context context;
-    private int selectedPosition = -1;
+    private final List<String> categoryNames;
+    private final Context context;
     private final OnCategorySelectedListener onCategorySelectedListener;
+    private int selectedPosition = -1;
 
     public interface OnCategorySelectedListener {
         void onCategorySelected(String categoryName);
@@ -46,15 +48,30 @@ public class TodoADD_Adapter extends RecyclerView.Adapter<TodoADD_Adapter.ViewHo
         holder.radioButton.setChecked(position == selectedPosition);
 
         holder.radioButton.setOnClickListener(v -> {
-            selectedPosition = position;
-            notifyDataSetChanged();
-            onCategorySelectedListener.onCategorySelected(categoryName); // 카테고리 이름 전달
+            int currentPosition = holder.getAdapterPosition();
+            if (currentPosition != RecyclerView.NO_POSITION) {
+                selectedPosition = currentPosition;
+                notifyDataSetChanged();
+
+                // DB 조회 수행
+                new Thread(() -> {
+                    boolean categoryExists = AppDatabase.getDatabase(context).controlDao().existsByCategoryName(categoryName);
+                    ((RecyclerView) holder.itemView.getParent()).post(() -> {
+                        if (categoryExists) {
+                            Toast.makeText(context, "카테고리가 조회되었습니다.", Toast.LENGTH_SHORT).show();
+                            onCategorySelectedListener.onCategorySelected(categoryName);
+                        } else {
+                            Toast.makeText(context, "카테고리를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }).start();
+            }
         });
     }
 
     @Override
     public int getItemCount() {
-        return categoryNames != null ? categoryNames.size() : 0;
+        return categoryNames.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
