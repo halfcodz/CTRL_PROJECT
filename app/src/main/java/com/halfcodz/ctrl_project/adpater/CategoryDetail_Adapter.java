@@ -16,7 +16,7 @@ import java.util.List;
 
 public class CategoryDetail_Adapter extends RecyclerView.Adapter<CategoryDetail_Adapter.ViewHolder> {
 
-    private List<Control> todoList;
+    private final List<Control> todoList;
     private final OnTodoDeleteListener deleteListener;
 
     public interface OnTodoDeleteListener {
@@ -38,7 +38,7 @@ public class CategoryDetail_Adapter extends RecyclerView.Adapter<CategoryDetail_
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Control todo = todoList.get(position);
-        holder.todoNameTextView.setText(todo.getControlItem()); // 수정된 부분
+        holder.todoNameTextView.setText(todo.getControlItem());
         holder.deleteButton.setOnClickListener(v -> deleteListener.onDelete(position));
     }
 

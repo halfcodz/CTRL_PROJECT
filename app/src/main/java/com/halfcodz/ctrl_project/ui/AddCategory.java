@@ -31,7 +31,6 @@ public class AddCategory extends AppCompatActivity {
     private List<Control> todoItems;
     private AppDatabase database;
     private boolean isSaving = false;
-    private String selectedCategoryName; // 선택된 카테고리명 저장
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +40,6 @@ public class AddCategory extends AppCompatActivity {
         initializeViews();
         database = AppDatabase.getDatabase(getApplicationContext());
         setupRecyclerView();
-
-        // 다른 액티비티에서 선택된 카테고리명을 가져옴
-        selectedCategoryName = getIntent().getStringExtra("selectedCategoryName");
-        if (selectedCategoryName != null) {
-            categoryName.setText(selectedCategoryName);
-        }
 
         addTodoButton.setOnClickListener(v -> addTodoItem());
         saveCategoryButton.setOnClickListener(v -> saveCategoryAndNavigate());
@@ -87,7 +80,7 @@ public class AddCategory extends AppCompatActivity {
     }
 
     private void saveCategoryAndNavigate() {
-        if (isSaving) return; // 이미 저장 중이면 실행하지 않음
+        if (isSaving) return;
 
         String name = categoryName.getText().toString().trim();
         if (name.isEmpty()) {
@@ -104,38 +97,31 @@ public class AddCategory extends AppCompatActivity {
         saveCategoryButton.setEnabled(false);
 
         Executors.newSingleThreadExecutor().execute(() -> {
-            boolean isDuplicate = database.controlDao().existsByCategoryName(name);
-            if (isDuplicate) {
-                runOnUiThread(() -> {
-                    Toast.makeText(this, "이미 존재하는 카테고리 이름입니다", Toast.LENGTH_SHORT).show();
-                    saveCategoryButton.setEnabled(true);
-                    isSaving = false;
-                });
-                return;
-            }
-
-            // 카테고리를 저장
+            // 카테고리 저장
             Control category = new Control();
             category.setCategoryName(name);
-            category.setControlItem(null); // 카테고리 자체는 통제 항목을 가지지 않음
             long categoryId = database.controlDao().insert(category);
 
             Log.d("AddCategory", "Category saved with name: " + name);
 
-            // 통제 항목을 저장
+            // 통제 항목 저장
             for (Control control : todoItems) {
-                control.setCategoryName(name); // Control의 category_name을 설정
-                database.controlDao().insert(control);
-                Log.d("AddCategory", "Control saved with category name: " + name + ", Control Item: " + control.getControlItem());
+                if (control.getControlItem() != null && !control.getControlItem().trim().isEmpty()) {
+                    control.setCategoryId((int) categoryId);
+                    control.setCategoryName(name);
+                    database.controlDao().insert(control);
+                }
             }
+
+            database.controlDao().deleteControlswithNullItems();
 
             runOnUiThread(() -> {
                 Toast.makeText(this, "카테고리가 저장되었습니다", Toast.LENGTH_SHORT).show();
                 isSaving = false;
 
-                // 선택된 카테고리명 전달
                 Intent resultIntent = new Intent();
-                resultIntent.putExtra("savedCategoryName", name);
+                resultIntent.putExtra("categoryId", (int) categoryId);
+                resultIntent.putExtra("categoryName", name);
                 setResult(RESULT_OK, resultIntent);
 
                 finish();

@@ -20,7 +20,8 @@ public interface ControlDao {
     // 카테고리 이름으로 중복 확인 메서드 추가
     @Query("SELECT EXISTS(SELECT 1 FROM control WHERE category_name = :categoryName LIMIT 1)")
     boolean existsByCategoryName(String categoryName);
-
+    @Query("DELETE FROM control WHERE control_item IS NULL")
+    void deleteControlswithNullItems();
 
     // 카테고리 이름으로 통제 항목 가져오기
     @Query("SELECT * FROM control WHERE category_name = :categoryName")
