@@ -37,6 +37,8 @@ public interface ControlDao {
     @Query("SELECT EXISTS(SELECT 1 FROM control WHERE category_id = :categoryId AND control_item = :itemName LIMIT 1)")
     boolean existsByCategoryAndItem(int categoryId, String itemName);
 
+    @Query("DELETE FROM control WHERE control_item IS NULL")
+    void deleteControlsWithNullItems();
 
 
 

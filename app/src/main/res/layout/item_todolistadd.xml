@@ -10,15 +10,16 @@
     <RadioGroup
         android:id="@+id/todolist_add_RadioGroup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/control_item_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:fontFamily="@font/rixyeoljeongdoregular"
             android:text="카테고리 이름"
-            android:textColor="#000"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +29,6 @@
             android:id="@+id/todolist_add_RadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
             android:textSize="16sp"
             android:layout_gravity="right"/>
     </RadioGroup>

@@ -21,7 +21,7 @@
             android:layout_height="57dp"
             android:layout_marginStart="138dp"
             android:layout_marginEnd="52dp"
-            android:fontFamily="@font/payboocotfextrabold"
+            android:fontFamily="@font/rixyeoljeongdoregular"
             android:gravity="center"
             android:text="카테고리 추가"
             android:textColor="@color/white"
@@ -60,10 +60,11 @@
         android:id="@+id/detailaddTodoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/rixyeoljeongdoregular"
+        android:fontFamily="@font/payboocotfextrabold"
         android:stateListAnimator="@null"
         android:text="통제목록 추가"
-        android:textColor="#404040"
+        android:background="@drawable/round_button"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@id/detailTodoItem"
         app:layout_constraintTop_toBottomOf="@id/detailTodoItem" />
 
@@ -88,10 +89,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:background="@drawable/round_button"
         android:fontFamily="@font/rixyeoljeongdoregular"
         android:stateListAnimator="@null"
         android:text="수정"
-        android:textColor="#404040"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,20 +9,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:orientation="horizontal"
         android:gravity="center"
-        android:background="@color/white">
+        android:background="@drawable/img_wave">
 
         <TextView
-            android:background="@drawable/img_wave"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:text="[ 집중 모드 ]"
+            android:text="집중 모드"
             android:id="@+id/focus_Main"
             android:gravity="center"
             android:textColor="@color/white"
-            android:textSize="22sp"
+            android:textSize="21sp"
             android:fontFamily="@font/rixyeoljeongdoregular"/>
 
     </LinearLayout>
@@ -47,7 +46,7 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:background="@color/white"
-        android:gravity="end">
+        android:gravity="end|bottom">
 
         <Button
             android:id="@+id/btn_focus_mode"

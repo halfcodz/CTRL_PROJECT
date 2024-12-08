@@ -116,18 +116,20 @@ public class AddCategory extends AppCompatActivity {
 
             // 카테고리를 저장
             Control category = new Control();
-            category.setCategoryName(name);
-            category.setControlItem(null); // 카테고리 자체는 통제 항목을 가지지 않음
+            category.setCategoryName(name);// 카테고리 자체는 통제 항목을 가지지 않음
             long categoryId = database.controlDao().insert(category);
 
             Log.d("AddCategory", "Category saved with name: " + name);
 
             // 통제 항목을 저장
             for (Control control : todoItems) {
-                control.setCategoryName(name); // Control의 category_name을 설정
+                control.setCategoryName(name);
+                control.setCategoryId((int) categoryId);// Control의 category_name을 설정
                 database.controlDao().insert(control);
                 Log.d("AddCategory", "Control saved with category name: " + name + ", Control Item: " + control.getControlItem());
             }
+
+            database.controlDao().deleteControlsWithNullItems();
 
             runOnUiThread(() -> {
                 Toast.makeText(this, "카테고리가 저장되었습니다", Toast.LENGTH_SHORT).show();

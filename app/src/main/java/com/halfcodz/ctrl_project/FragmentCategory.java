@@ -40,13 +40,12 @@ public class FragmentCategory extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
 
-
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         db = AppDatabase.getDatabase(requireContext());
         categories = new ArrayList<>();
-        categoryAdapter = new CategoryMain_Adapter(categories, new CategoryMain_Adapter.OnCategoryInteractionListener() {
+        categoryAdapter = new CategoryMain_Adapter(getContext(), categories, new CategoryMain_Adapter.OnCategoryInteractionListener() {
             @Override
             public void onCategoryClick(int position) {
                 Control clickedCategory = categories.get(position);
@@ -69,6 +68,7 @@ public class FragmentCategory extends Fragment {
                 });
             }
         });
+
         recyclerView.setAdapter(categoryAdapter);
 
         addCategoryButton = view.findViewById(R.id.addCateogryButton);
@@ -77,16 +77,22 @@ public class FragmentCategory extends Fragment {
             startActivityForResult(intent, ADD_CATEGORY_REQUEST_CODE);
         });
 
-        loadCategories();
+        loadCategories(); // 초기 데이터 로드
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadCategories(); // 프래그먼트가 다시 보일 때마다 데이터 로드
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADD_CATEGORY_REQUEST_CODE && resultCode == getActivity().RESULT_OK) {
-            loadCategories(); // 명시적으로 데이터 로드
+            loadCategories(); // 카테고리 추가 후 데이터 로드
         }
     }
 

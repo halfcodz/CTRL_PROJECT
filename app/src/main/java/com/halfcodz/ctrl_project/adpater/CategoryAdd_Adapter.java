@@ -7,19 +7,24 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.halfcodz.ctrl_project.R;
+import com.halfcodz.ctrl_project.data.AppDatabase;
 import com.halfcodz.ctrl_project.data.Control;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class CategoryAdd_Adapter extends RecyclerView.Adapter<CategoryAdd_Adapter.TodoViewHolder> {
 
     private final List<Control> todoItems; // Control 리스트를 사용
     private final Context context;
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public CategoryAdd_Adapter(Context context, List<Control> todoItems) {
         this.context = context;
@@ -40,12 +45,22 @@ public class CategoryAdd_Adapter extends RecyclerView.Adapter<CategoryAdd_Adapte
         holder.todoName.setText(control.getControlItem() != null ? control.getControlItem() : "항목 없음");
 
         holder.deleteButton.setOnClickListener(view -> {
-            // UI에서 항목 삭제
             int adapterPosition = holder.getAdapterPosition();
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                todoItems.remove(adapterPosition);
-                notifyItemRemoved(adapterPosition);
-                notifyItemRangeChanged(adapterPosition, todoItems.size());
+                Control controlToDelete = todoItems.get(adapterPosition);
+
+                // 데이터베이스에서 항목 삭제
+                executorService.execute(() -> {
+                    AppDatabase.getDatabase(context).controlDao().delete(controlToDelete);
+
+                    // UI 업데이트
+                    ((RecyclerView) holder.itemView.getParent()).post(() -> {
+                        todoItems.remove(adapterPosition);
+                        notifyItemRemoved(adapterPosition);
+                        notifyItemRangeChanged(adapterPosition, todoItems.size());
+                        Toast.makeText(context, "항목이 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                    });
+                });
             }
         });
     }

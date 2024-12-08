@@ -23,7 +23,7 @@
             android:padding="8dp"
             android:text="일정 수정"
             android:textColor="@color/white"
-            android:textSize="18sp" />
+            android:textSize="21sp" />
 
     </LinearLayout>
 
@@ -183,6 +183,7 @@
             android:layout_marginTop="16dp"
             android:background="@drawable/round_button"
             android:text="수정"
+            android:fontFamily="@font/rixyeoljeongdoregular"
             android:textColor="@color/white" />
     </LinearLayout>
 </LinearLayout>

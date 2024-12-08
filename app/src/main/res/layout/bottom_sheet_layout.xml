@@ -15,24 +15,30 @@
             android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:layout_weight="1"
+            android:textColor="@color/white"
+            android:fontFamily="@font/rixyeoljeongdoregular"
+            android:textSize="30sp"
             android:layout_margin="5dp"
             android:text="성공"
-            android:backgroundTint="@color/material_dynamic_neutral60" />
+            android:background="#C3CDFA" />
 
         <Button
             android:id="@+id/missonFail"
             android:layout_width="wrap_content"
             android:layout_height="100dp"
             android:layout_weight="1"
+            android:textColor="@color/white"
+            android:fontFamily="@font/rixyeoljeongdoregular"
+            android:textSize="30sp"
             android:layout_margin="5dp"
             android:text="실패"
-            android:backgroundTint="@color/material_dynamic_neutral60" />
+            android:background="#FFCCCC" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/slidedrawer_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="wrap_content" />
 
     <Button
         android:layout_marginTop="5dp"
@@ -40,6 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="확인"
-        android:backgroundTint="@color/cardview_dark_background"
-        android:textColor="@android:color/white" />
+        android:fontFamily="@font/rixyeoljeongdoregular"
+        android:background="@drawable/round_button"
+        android:textColor="@color/white" />
 </LinearLayout>
