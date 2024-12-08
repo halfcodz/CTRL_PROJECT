@@ -2,6 +2,7 @@ package com.halfcodz.ctrl_project.adpater;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,25 +50,39 @@ public class TodoMain_Adapter extends RecyclerView.Adapter<TodoMain_Adapter.Todo
         holder.todoStart.setText(todo.start_sch != null ? todo.start_sch : "시작 날짜 없음");
         holder.todoEnd.setText(todo.end_sch != null ? todo.end_sch : "종료 날짜 없음");
 
-        // btnRecord 클릭 리스너: 슬라이드드로어 활성화
         holder.btnRecord.setOnClickListener(v -> {
-            String title = todoItems.get(position).getTitle();
+            // SharedPreferences에서 선택된 카테고리 이름 가져오기
+            String selectedCategoryName = sharedPreferences.getString("selected_category_name", null);
+
+            if (selectedCategoryName == null) {
+                Toast.makeText(context, "카테고리를 선택하세요.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Log.d("TodoMain_Adapter", "Selected Category: '" + selectedCategoryName + "'");
+
             CustomBottomSheetDialog customBottomSheetDialog = new CustomBottomSheetDialog();
 
             new Thread(() -> {
+                // 선택된 카테고리 이름으로 Control 항목 가져오기
                 List<Control> controlItems = AppDatabase.getDatabase(context)
-                        .controlDao().getTodosByCategoryName(title);
+                        .controlDao().getTodosByCategoryName(selectedCategoryName);
+
+                Log.d("TodoMain_Adapter", "Control items size for category '" + selectedCategoryName + "': " + controlItems.size());
 
                 ((FragmentActivity) context).runOnUiThread(() -> {
                     if (controlItems.isEmpty()) {
-                        Toast.makeText(context, "해당 통제 항목이 없습니다.", Toast.LENGTH_SHORT).show();
+                        Log.d("TodoMain_Adapter", "No control items found for category: '" + selectedCategoryName + "'");
+                        Toast.makeText(context, "해당 카테고리에 통제 항목이 없습니다.", Toast.LENGTH_SHORT).show();
                     } else {
+                        Log.d("TodoMain_Adapter", "Showing CustomBottomSheetDialog");
                         customBottomSheetDialog.setControlList(controlItems);
                         customBottomSheetDialog.show(((FragmentActivity) context).getSupportFragmentManager(), "CustomBottomSheet");
                     }
                 });
             }).start();
         });
+
 
         holder.todo_del.setOnClickListener(view -> {
             // 항목 삭제
@@ -80,13 +95,6 @@ public class TodoMain_Adapter extends RecyclerView.Adapter<TodoMain_Adapter.Todo
                 AppDatabase.getDatabase(context).todoItemDao().delete(Collections.singletonList(todo));
             }).start();
         });
-    }
-
-    private void saveSelectedControlItem(String controlItemText) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("selected_control_item", controlItemText);
-        editor.apply();
-        Toast.makeText(context, "선택된 통제 항목이 저장되었습니다.", Toast.LENGTH_SHORT).show();
     }
 
     @Override

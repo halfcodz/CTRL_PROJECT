@@ -1,6 +1,5 @@
 package com.halfcodz.ctrl_project.adpater;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,24 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.halfcodz.ctrl_project.data.Control;
-import com.halfcodz.ctrl_project.ui.CategoryDetail;
 import com.inhatc.real_project.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryMain_Adapter extends RecyclerView.Adapter<CategoryMain_Adapter.ViewHolder> {
-
-    private List<Control> categoryList;
-    private final OnCategoryInteractionListener interactionListener;
 
     public interface OnCategoryInteractionListener {
         void onCategoryClick(int position);
         void onCategoryDelete(int position);
     }
 
+    private List<Control> categoryList;
+    private final OnCategoryInteractionListener interactionListener;
+
     public CategoryMain_Adapter(List<Control> categoryList, OnCategoryInteractionListener listener) {
-        this.categoryList = (categoryList != null) ? categoryList : new ArrayList<>();
+        this.categoryList = categoryList;
         this.interactionListener = listener;
     }
 
@@ -51,12 +48,6 @@ public class CategoryMain_Adapter extends RecyclerView.Adapter<CategoryMain_Adap
     @Override
     public int getItemCount() {
         return categoryList.size();
-    }
-
-    public void updateCategories(List<Control> newCategoryList) {
-        this.categoryList.clear();
-        this.categoryList.addAll(newCategoryList);
-        notifyDataSetChanged();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

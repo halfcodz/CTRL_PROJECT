@@ -26,16 +26,13 @@ public class CustomBottomSheetDialog extends BottomSheetDialogFragment {
 
     // 통제 항목 리스트를 설정하는 메서드
     public void setControlList(List<Control> controls) {
-        controlList.clear();
         if (controls != null && !controls.isEmpty()) {
-            controlList.addAll(controls);
-        }
+            this.controlList.clear();
+            this.controlList.addAll(controls);
 
-        if (adapter != null) {
-            adapter.updateData(controlList);
-        } else if (recyclerView != null) {
-            adapter = new TodoSlideDrawer_Adapter(getContext(), controlList);
-            recyclerView.setAdapter(adapter);
+            if (adapter != null) {
+                adapter.updateData(controlList);  // RecyclerView Adapter에 데이터 업데이트
+            }
         }
     }
 

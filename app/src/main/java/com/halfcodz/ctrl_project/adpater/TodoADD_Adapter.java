@@ -1,6 +1,7 @@
 package com.halfcodz.ctrl_project.adpater;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.halfcodz.ctrl_project.data.AppDatabase;
 import com.inhatc.real_project.R;
 
 import java.util.List;
@@ -20,16 +20,20 @@ public class TodoADD_Adapter extends RecyclerView.Adapter<TodoADD_Adapter.ViewHo
 
     private final List<String> categoryNames;
     private final Context context;
-    private final OnCategorySelectedListener onCategorySelectedListener;
     private int selectedPosition = -1;
+    private final SharedPreferences sharedPreferences;
+    private final OnCategorySelectedListener onCategorySelectedListener;
 
+    // 인터페이스 정의
     public interface OnCategorySelectedListener {
         void onCategorySelected(String categoryName);
     }
 
+    // 생성자
     public TodoADD_Adapter(Context context, List<String> categoryNames, OnCategorySelectedListener listener) {
         this.context = context;
         this.categoryNames = categoryNames;
+        this.sharedPreferences = context.getSharedPreferences("com.halfcodz.ctrl_project.PREFS", Context.MODE_PRIVATE);
         this.onCategorySelectedListener = listener;
     }
 
@@ -43,30 +47,26 @@ public class TodoADD_Adapter extends RecyclerView.Adapter<TodoADD_Adapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String categoryName = categoryNames.get(position);
-
         holder.categoryNameText.setText(categoryName);
         holder.radioButton.setChecked(position == selectedPosition);
 
         holder.radioButton.setOnClickListener(v -> {
-            int currentPosition = holder.getAdapterPosition();
-            if (currentPosition != RecyclerView.NO_POSITION) {
-                selectedPosition = currentPosition;
-                notifyDataSetChanged();
+            int previousPosition = selectedPosition;
+            selectedPosition = holder.getAdapterPosition();
+            notifyItemChanged(previousPosition);  // 이전 선택 항목 갱신
+            notifyItemChanged(selectedPosition);  // 현재 선택 항목 갱신
 
-                new Thread(() -> {
-                    boolean categoryExists = AppDatabase.getDatabase(context)
-                            .controlDao().existsByCategoryName(categoryName);
+            // 선택된 카테고리 이름을 SharedPreferences에 저장
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("selected_category_name", categoryName);
+            editor.apply();
 
-                    ((RecyclerView) holder.itemView.getParent()).post(() -> {
-                        if (categoryExists) {
-                            onCategorySelectedListener.onCategorySelected(categoryName);
-                            Toast.makeText(context, "카테고리가 선택되었습니다.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(context, "카테고리를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }).start();
+            // 콜백 호출하여 선택된 카테고리 전달
+            if (onCategorySelectedListener != null) {
+                onCategorySelectedListener.onCategorySelected(categoryName);
             }
+
+            Toast.makeText(context, "선택된 카테고리: " + categoryName, Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -75,7 +75,7 @@ public class TodoADD_Adapter extends RecyclerView.Adapter<TodoADD_Adapter.ViewHo
         return categoryNames.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView categoryNameText;
         RadioButton radioButton;
 

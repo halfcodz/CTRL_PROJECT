@@ -81,7 +81,7 @@
         app:layout_constraintTop_toBottomOf="@id/detailaddTodoButton"
         tools:layout_editor_absoluteX="53dp" />
 
-<!--    리사이클러뷰 에러가 발생하면 아래 세줄 삭제할 것 -->
+    <!--    리사이클러뷰 에러가 발생하면 아래 세줄 삭제할 것 -->
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/detailsaveCategoryButton"

@@ -2,6 +2,7 @@ package com.halfcodz.ctrl_project;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class FragmentCategory extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
+
 
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -92,6 +94,13 @@ public class FragmentCategory extends Fragment {
     private void loadCategories() {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<Control> fetchedCategories = db.controlDao().getAllCategories();
+
+            // 디버그용 코드: 모든 Control 항목을 로그로 출력
+            List<Control> allControls = db.controlDao().getAllControls();
+            Log.d("DatabaseCheck", "All controls in the database:");
+            for (Control control : allControls) {
+                Log.d("DatabaseCheck", "Category Name: " + control.getCategoryName() + ", Control Item: " + control.getControlItem());
+            }
 
             requireActivity().runOnUiThread(() -> {
                 categories.clear();

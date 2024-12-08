@@ -63,6 +63,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/action_bar01" />
 
-<!--    리사이클러뷰 아래 공간 활용을 뭘로 더 할지 고민해보자-->
+    <!--    리사이클러뷰 아래 공간 활용을 뭘로 더 할지 고민해보자-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

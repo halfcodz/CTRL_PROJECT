@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.halfcodz.ctrl_project.data.Control;
 import com.inhatc.real_project.R;
 

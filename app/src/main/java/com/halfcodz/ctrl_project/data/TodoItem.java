@@ -1,3 +1,4 @@
+
 package com.halfcodz.ctrl_project.data;
 
 import androidx.room.ColumnInfo;
@@ -23,6 +24,18 @@ public class TodoItem {
 
     @ColumnInfo(name = "time") // **시간 필드 추가**
     private String time;
+
+
+    public String categoryName;
+
+    // Getter와 Setter 추가
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
 
     // Getter and Setter for id
     public int getId() {
