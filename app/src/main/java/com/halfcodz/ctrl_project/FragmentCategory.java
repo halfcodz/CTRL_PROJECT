@@ -48,24 +48,33 @@ public class FragmentCategory extends Fragment {
         categoryAdapter = new CategoryMain_Adapter(getContext(), categories, new CategoryMain_Adapter.OnCategoryInteractionListener() {
             @Override
             public void onCategoryClick(int position) {
-                Control clickedCategory = categories.get(position);
-                Intent intent = new Intent(getActivity(), CategoryDetail.class);
-                intent.putExtra("categoryId", clickedCategory.getId());
-                startActivity(intent);
+                if (position >= 0 && position < categories.size()) {
+                    Control clickedCategory = categories.get(position);
+                    Intent intent = new Intent(getActivity(), CategoryDetail.class);
+                    intent.putExtra("categoryId", clickedCategory.getId());
+                    startActivity(intent);
+                }
             }
 
             @Override
             public void onCategoryDelete(int position) {
-                Executors.newSingleThreadExecutor().execute(() -> {
-                    Control categoryToDelete = categories.get(position);
-                    db.controlDao().delete(categoryToDelete);
+                if (position >= 0 && position < categories.size()) {
+                    Executors.newSingleThreadExecutor().execute(() -> {
+                        Control categoryToDelete = categories.get(position);
+                        db.controlDao().delete(categoryToDelete);
 
-                    requireActivity().runOnUiThread(() -> {
-                        categories.remove(position);
-                        categoryAdapter.notifyItemRemoved(position);
-                        Toast.makeText(getContext(), "카테고리가 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                        requireActivity().runOnUiThread(() -> {
+                            if (position < categories.size()) {
+                                categories.remove(position);
+                                categoryAdapter.notifyItemRemoved(position);
+                                categoryAdapter.notifyItemRangeChanged(position, categories.size());
+                                Toast.makeText(getContext(), "카테고리가 삭제되었습니다.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     });
-                });
+                } else {
+                    Toast.makeText(getContext(), "삭제할 항목이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -100,11 +109,11 @@ public class FragmentCategory extends Fragment {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<Control> fetchedCategories = db.controlDao().getAllCategories();
 
-            // 디버그용 코드: 모든 Control 항목을 로그로 출력
+            // 디버그용 코드: 삭제 후 모든 Control 항목을 로그로 출력
             List<Control> allControls = db.controlDao().getAllControls();
-            Log.d("DatabaseCheck", "All controls in the database:");
+            Log.d("DatabaseCheck", "All controls in the database after deletion:");
             for (Control control : allControls) {
-                Log.d("DatabaseCheck", "Category Name: " + control.getCategoryName() + ", Control Item: " + control.getControlItem());
+                Log.d("DatabaseCheck", "Category Name: " + control.getCategoryName() + ", Control Item: " + control.getControlItem() + ", ID: " + control.getId());
             }
 
             requireActivity().runOnUiThread(() -> {

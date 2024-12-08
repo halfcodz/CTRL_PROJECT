@@ -42,6 +42,7 @@ public interface ControlDao {
 
 
 
+
     @Query("DELETE FROM control")
     void deleteAll();
 

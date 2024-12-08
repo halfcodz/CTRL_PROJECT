@@ -1,6 +1,7 @@
 package com.halfcodz.ctrl_project.adpater;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.halfcodz.ctrl_project.R;
 import com.halfcodz.ctrl_project.data.AppDatabase;
 import com.halfcodz.ctrl_project.data.Control;
+import com.halfcodz.ctrl_project.ui.CategoryDetail;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -22,7 +24,7 @@ import java.util.concurrent.Executors;
 
 public class CategoryAdd_Adapter extends RecyclerView.Adapter<CategoryAdd_Adapter.TodoViewHolder> {
 
-    private final List<Control> todoItems; // Control 리스트를 사용
+    private final List<Control> todoItems;
     private final Context context;
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -34,19 +36,35 @@ public class CategoryAdd_Adapter extends RecyclerView.Adapter<CategoryAdd_Adapte
     @NonNull
     @Override
     public TodoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.item_todo, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_todo, parent, false);
         return new TodoViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull TodoViewHolder holder, int position) {
         Control control = todoItems.get(position);
-        holder.todoName.setText(control.getControlItem() != null ? control.getControlItem() : "항목 없음");
 
+        // controlItem이 null이 아닌지 확인하고 기본값 설정
+        if (control != null && control.getControlItem() != null) {
+            holder.todoName.setText(control.getControlItem());
+        } else {
+            holder.todoName.setText("항목 없음");
+        }
+
+        // 항목 클릭 시 CategoryDetail로 이동
+        holder.itemView.setOnClickListener(v -> {
+            if (control != null) {
+                Intent intent = new Intent(context, CategoryDetail.class);
+                intent.putExtra("categoryId", control.getCategoryId());
+                intent.putExtra("categoryName", control.getCategoryName());
+                context.startActivity(intent);
+            }
+        });
+
+        // 삭제 버튼 클릭 시
         holder.deleteButton.setOnClickListener(view -> {
             int adapterPosition = holder.getAdapterPosition();
-            if (adapterPosition != RecyclerView.NO_POSITION) {
+            if (adapterPosition != RecyclerView.NO_POSITION && control != null) {
                 Control controlToDelete = todoItems.get(adapterPosition);
 
                 // 데이터베이스에서 항목 삭제
@@ -67,7 +85,7 @@ public class CategoryAdd_Adapter extends RecyclerView.Adapter<CategoryAdd_Adapte
 
     @Override
     public int getItemCount() {
-        return todoItems.size();
+        return todoItems != null ? todoItems.size() : 0;
     }
 
     static class TodoViewHolder extends RecyclerView.ViewHolder {

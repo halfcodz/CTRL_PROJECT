@@ -22,6 +22,7 @@ public class TodoSlideDrawer_Adapter extends RecyclerView.Adapter<TodoSlideDrawe
     public TodoSlideDrawer_Adapter(Context context, List<Control> controlItems) {
         this.context = context;
         this.controlItems = controlItems;
+
     }
 
     @NonNull
