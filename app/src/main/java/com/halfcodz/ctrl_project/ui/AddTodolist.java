@@ -86,7 +86,6 @@ public class AddTodolist extends AppCompatActivity {
             runOnUiThread(() -> {
                 todoADDAdapter = new TodoADD_Adapter(this, categoryNames, selectedCategoryName -> {
                     this.selectedCategoryName = selectedCategoryName;
-                    loadControlsForSelectedCategory();
                 });
                 recyclerViewTodolistAddCategory.setAdapter(todoADDAdapter);
             });
