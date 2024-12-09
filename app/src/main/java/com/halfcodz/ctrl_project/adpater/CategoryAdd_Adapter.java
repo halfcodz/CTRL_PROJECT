@@ -2,6 +2,7 @@ package com.halfcodz.ctrl_project.adpater;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,18 +48,16 @@ public class CategoryAdd_Adapter extends RecyclerView.Adapter<CategoryAdd_Adapte
         // controlItem이 null이 아닌지 확인하고 기본값 설정
         if (control != null && control.getControlItem() != null) {
             holder.todoName.setText(control.getControlItem());
-        } else {
-            holder.todoName.setText("항목 없음");
         }
 
-        // 항목 클릭 시 CategoryDetail로 이동
-        holder.itemView.setOnClickListener(v -> {
-            if (control != null) {
-                Intent intent = new Intent(context, CategoryDetail.class);
-                intent.putExtra("categoryId", control.getCategoryId());
-                intent.putExtra("categoryName", control.getCategoryName());
-                context.startActivity(intent);
-            }
+        holder.todoName.setOnClickListener(v -> {
+            Log.d("CategoryAdd_Adapter", "Clicked Category ID: " + control.getCategoryId());
+            Log.d("CategoryAdd_Adapter", "Clicked Category Name: " + control.getCategoryName());
+
+            Intent intent = new Intent(context, CategoryDetail.class);
+            intent.putExtra("categoryId", control.getCategoryId());
+            intent.putExtra("categoryName", control.getCategoryName());
+            context.startActivity(intent);
         });
 
         // 삭제 버튼 클릭 시

@@ -4,8 +4,9 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.ColumnInfo;
 
-@Entity(tableName = "control")
+@Entity(tableName = "controls")
 public class Control {
+
     @PrimaryKey(autoGenerate = true)
     private int id;
 

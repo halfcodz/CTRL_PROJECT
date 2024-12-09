@@ -11,7 +11,7 @@
         android:layout_weight="1"
         android:fontFamily="@font/rixyeoljeongdoregular"
         android:text="카테고리 이름"
-        android:textSize="18sp" />
+        android:textSize="22sp" />
 
     <ImageButton
         android:id="@+id/Main_deleteButton"

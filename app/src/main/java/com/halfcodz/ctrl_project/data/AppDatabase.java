@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Control.class, TodoItem.class, Focus.class}, version = 5, exportSchema = false)
+@Database(entities = {Control.class, TodoItem.class, Focus.class}, version = 6, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase instance;
 

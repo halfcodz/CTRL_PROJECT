@@ -1,7 +1,7 @@
 package com.halfcodz.ctrl_project.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -42,18 +42,16 @@ public class CategoryDetail extends AppCompatActivity {
         db = AppDatabase.getDatabase(getApplicationContext());
 
         todoList = new ArrayList<>();
-        adapter = new CategoryDetail_Adapter(todoList, this::deleteTodoItem);
+        adapter = new CategoryDetail_Adapter(todoList, position -> deleteTodoItem(position));
         detailRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         detailRecyclerView.setAdapter(adapter);
 
-        // 인텐트에서 카테고리 정보를 받기
         loadCategoryDetailsFromIntent();
 
         detailAddTodoButton.setOnClickListener(v -> addTodoItem());
         detailSaveCategoryButton.setOnClickListener(v -> saveCategoryDetails());
     }
 
-    // 뷰 초기화 메서드
     private void initializeViews() {
         detailCategoryName = findViewById(R.id.detailCategoryName);
         detailTodoItem = findViewById(R.id.detailTodoItem);
@@ -62,10 +60,12 @@ public class CategoryDetail extends AppCompatActivity {
         detailRecyclerView = findViewById(R.id.detailRecyclerView);
     }
 
-    // 인텐트에서 데이터 받기
     private void loadCategoryDetailsFromIntent() {
         categoryId = getIntent().getIntExtra("categoryId", -1);
         categoryName = getIntent().getStringExtra("categoryName");
+
+        Log.d("CategoryDetail", "Received Category ID: " + categoryId);
+        Log.d("CategoryDetail", "Received Category Name: " + categoryName);
 
         if (categoryId == -1) {
             Toast.makeText(this, "잘못된 카테고리 ID입니다.", Toast.LENGTH_SHORT).show();
@@ -77,14 +77,18 @@ public class CategoryDetail extends AppCompatActivity {
             detailCategoryName.setText(categoryName);
         }
 
-        // 카테고리의 통제 항목 불러오기
-        loadCategoryNameAndItems(categoryId);
+        loadCategoryItems(categoryId);
     }
 
     // 카테고리 ID로 통제 항목 불러오기
-    private void loadCategoryNameAndItems(int categoryId) {
+    private void loadCategoryItems(int categoryId) {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<Control> controls = db.controlDao().getTodosByCategoryId(categoryId);
+
+            Log.d("CategoryDetail", "Controls loaded: " + controls.size());
+            for (Control control : controls) {
+                Log.d("CategoryDetail", "Loaded Control - ID: " + control.getId() + ", Item: " + control.getControlItem() + ", Category ID: " + control.getCategoryId());
+            }
 
             runOnUiThread(() -> {
                 todoList.clear();
@@ -94,31 +98,7 @@ public class CategoryDetail extends AppCompatActivity {
         });
     }
 
-    // 새 통제 항목 추가
-    private void addTodoItem() {
-        String todoText = detailTodoItem.getText().toString().trim();
-        if (!todoText.isEmpty()) {
-            Executors.newSingleThreadExecutor().execute(() -> {
-                Control newTodo = new Control();
-                newTodo.setControlItem(todoText);
-                newTodo.setCategoryId(categoryId);
-                newTodo.setCategoryName(categoryName);
 
-                long newTodoId = db.controlDao().insert(newTodo);
-                newTodo.setId((int) newTodoId);
-
-                runOnUiThread(() -> {
-                    todoList.add(newTodo);
-                    adapter.notifyDataSetChanged();
-                    detailTodoItem.setText("");
-                });
-            });
-        } else {
-            Toast.makeText(this, "항목을 입력하세요.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    // 통제 항목 삭제
     private void deleteTodoItem(int position) {
         Control todo = todoList.get(position);
         Executors.newSingleThreadExecutor().execute(() -> {
@@ -131,7 +111,31 @@ public class CategoryDetail extends AppCompatActivity {
         });
     }
 
-    // 카테고리 이름과 통제 항목 저장
+    private void addTodoItem() {
+        String todoText = detailTodoItem.getText().toString().trim();
+        if (todoText.isEmpty()) {
+            Toast.makeText(this, "통제 항목을 입력하세요.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Executors.newSingleThreadExecutor().execute(() -> {
+            Control newTodo = new Control();
+            newTodo.setControlItem(todoText);
+            newTodo.setCategoryId(categoryId);
+            newTodo.setCategoryName(categoryName);
+
+            long newTodoId = db.controlDao().insert(newTodo);
+            newTodo.setId((int) newTodoId);
+
+            runOnUiThread(() -> {
+                todoList.add(newTodo);
+                adapter.notifyDataSetChanged();
+                detailTodoItem.setText("");
+                Toast.makeText(this, "항목이 추가되었습니다.", Toast.LENGTH_SHORT).show();
+            });
+        });
+    }
+
     private void saveCategoryDetails() {
         String updatedName = detailCategoryName.getText().toString().trim();
         if (updatedName.isEmpty()) {
@@ -146,19 +150,7 @@ public class CategoryDetail extends AppCompatActivity {
 
             db.controlDao().update(category);
 
-            for (Control todo : todoList) {
-                if (todo.getId() == 0) {
-                    db.controlDao().insert(todo);
-                } else {
-                    db.controlDao().update(todo);
-                }
-            }
-
             runOnUiThread(() -> {
-                Intent intent = new Intent();
-                intent.putExtra("categoryId", categoryId);
-                intent.putExtra("categoryName", updatedName);
-                setResult(RESULT_OK, intent);
                 Toast.makeText(this, "카테고리가 저장되었습니다.", Toast.LENGTH_SHORT).show();
                 finish();
             });

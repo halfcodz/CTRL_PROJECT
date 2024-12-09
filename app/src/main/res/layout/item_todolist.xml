@@ -40,50 +40,42 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/start_text"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/rixyeoljeongdoregular"
-                android:text="시작일: "
-                android:textSize="13dp" />
+                android:layout_weight="1">
 
-            <TextView
-                android:id="@+id/todoStart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:fontFamily="@font/rixyeoljeongdoregular"
-                android:text="일정 시작"
-                android:textSize="13dp" />
+                <TextView
+                    android:id="@+id/todoStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/rixyeoljeongdoregular"
+                    android:text="일정 시작"
+                    android:textSize="13dp" />
 
-            <TextView
-                android:id="@+id/shift_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:fontFamily="@font/rixyeoljeongdoregular"
-                android:text=" ~ "
-                android:textSize="13dp" />
+                <TextView
+                    android:id="@+id/shift_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:fontFamily="@font/rixyeoljeongdoregular"
+                    android:text=" ~ "
+                    android:textSize="13dp" />
 
-            <TextView
-                android:id="@+id/end_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:fontFamily="@font/rixyeoljeongdoregular"
-                android:text="마감일: "
-                android:textSize="13dp" />
+                <TextView
+                    android:id="@+id/todoEnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="@font/rixyeoljeongdoregular"
+                    android:text="일정 끝"
+                    android:textSize="13dp" />
 
-            <TextView
-                android:id="@+id/todoEnd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="10dp"
-                android:fontFamily="@font/rixyeoljeongdoregular"
-                android:text="일정 끝"
-                android:textSize="13dp" />
+
+
+            </LinearLayout>
+
 
             <Button
                 android:id="@+id/todo_del"

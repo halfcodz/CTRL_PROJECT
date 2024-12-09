@@ -99,23 +99,10 @@ public class AddCategory extends AppCompatActivity {
         saveCategoryButton.setEnabled(false);
 
         Executors.newSingleThreadExecutor().execute(() -> {
-            // 중복 확인
-            boolean exists = database.controlDao().existsByCategoryName(name);
-            if (exists) {
-                runOnUiThread(() -> {
-                    Toast.makeText(this, "이미 존재하는 카테고리입니다.", Toast.LENGTH_SHORT).show();
-                    saveCategoryButton.setEnabled(true);
-                    isSaving = false;
-                });
-                return;
-            }
-
             // 카테고리 저장
             Control category = new Control();
             category.setCategoryName(name);
             long categoryId = database.controlDao().insert(category);
-
-            Log.d("AddCategory", "Category saved with name: " + name);
 
             // 통제 항목 저장
             for (Control control : todoItems) {
@@ -124,19 +111,12 @@ public class AddCategory extends AppCompatActivity {
                 database.controlDao().insert(control);
             }
 
-            database.controlDao().deleteControlsWithNullItems();
-
             runOnUiThread(() -> {
                 Toast.makeText(this, "카테고리가 저장되었습니다", Toast.LENGTH_SHORT).show();
                 isSaving = false;
-
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("categoryId", (int) categoryId);
-                resultIntent.putExtra("categoryName", name);
-                setResult(RESULT_OK, resultIntent);
-
                 finish();
             });
         });
     }
+
 }
