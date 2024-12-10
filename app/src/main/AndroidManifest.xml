@@ -23,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.ControlList" android:exported="true" />
+
+        <activity android:name=".ui.FailList" android:exported="true" />
+
+        <activity android:name=".ui.SuccessList" android:exported="true" />
 
         <activity android:name="com.halfcodz.ctrl_project.ui.AddCategory" android:exported="true"/>
 

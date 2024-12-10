@@ -76,7 +76,6 @@
 
             </LinearLayout>
 
-
             <Button
                 android:id="@+id/todo_del"
                 android:layout_width="25dp"
